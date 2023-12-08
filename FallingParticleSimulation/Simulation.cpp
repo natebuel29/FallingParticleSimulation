@@ -1,12 +1,12 @@
 #include "Simulation.h"
 #include <iostream>
-#include "Renderer.h"
+#include "Draw.h"
 
 // PUBLIC
 
-Simulation::Simulation(int width, int height) {
-	this->width = width;
-	this->height = height;
+Simulation::Simulation(int w, int h):width(w), height(h) {
+	this->width = w;
+	this->height = h;
 	simulationInit();
 }
 
@@ -27,10 +27,13 @@ void Simulation::simulate() {
 				quit = true;
 			}
 		}
-		renderer.clearScreen();
-		renderer.drawRect(width,height,width,height);
-		renderer.renderPresent();
+		//Clear screen
+		SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
+		SDL_RenderClear(renderer);
+		Draw::drawRect(renderer, width, height, width, height);
+		SDL_RenderPresent(renderer);
 	}
+
 }
 
 void Simulation::step() {
@@ -62,7 +65,17 @@ bool Simulation::simulationInit() {
 		return false;
 	}
 
-	renderer = Renderer(window);
+	//Create renderer for window
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (renderer == NULL)
+	{
+		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+	}
+
+	//Initialize renderer color
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+	gameTiles = GameTiles(this->height / 5, this->width / 5);
 
 	return true;
 }
@@ -70,6 +83,8 @@ bool Simulation::simulationInit() {
 void Simulation::destroy() {
 	// Will need to destroy renderer -> have a desctuctor for this?
 	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
+
 	SDL_Quit();
 
 	window = NULL;

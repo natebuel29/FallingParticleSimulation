@@ -1,10 +1,11 @@
 #pragma once
 #include <SDL.h>
-#include "Renderer.h"
+#include "GameTiles.h"
 
 class Simulation
 {
 	public:
+
 		Simulation(int width, int height);
 
 		~Simulation();
@@ -13,15 +14,19 @@ class Simulation
 
 		void step();
 
+
 	private:
 		int width, height;
+	
+		const int tileSize = 5;
 		
+		GameTiles gameTiles;
+
 		SDL_Window* window;
 
-		Renderer renderer;
+		SDL_Renderer* renderer;
 
 		bool simulationInit();
 
 		void destroy();
 };
-
