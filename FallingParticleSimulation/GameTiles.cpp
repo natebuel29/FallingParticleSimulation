@@ -18,6 +18,14 @@ int GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 	}
 }
 
+int GameTiles::getRowCount() {
+	return rows;
+}
+
+int GameTiles::getColumnCount() {
+	return columns;
+}
+
 bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, int value) {
 	if (isInBounds( x,  y,  xOffset,  yOffset)) {
 		gameTiles[x + xOffset][y + yOffset] = value;
