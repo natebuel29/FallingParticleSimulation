@@ -3,6 +3,15 @@
 
 
 // Public
+Logger* Logger::instance = nullptr;
+
+Logger* Logger::getInstance() {
+	if (instance == nullptr) {
+		instance = new Logger();
+	}
+
+	return instance;
+}
 
 void Logger::info(std::string message) {
 	log("INFO", message);

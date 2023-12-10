@@ -1,6 +1,8 @@
 #include "Simulation.h"
 #include <iostream>
 #include "Draw.h"
+#include "Logger.h"
+#include <string>
 
 // PUBLIC
 
@@ -20,7 +22,6 @@ void Simulation::simulate() {
 	bool mouseButtonPressed = false;
 	SDL_Event e;
 	int x = 0, y = 0;
-	Logger logger = Logger();
 
 	while (!quit) {
 
@@ -31,11 +32,11 @@ void Simulation::simulate() {
 			}
 
 			else if (e.type == SDL_MOUSEBUTTONDOWN) {
-				std::cout << "yo button is down" << std::endl;
+				Logger::getInstance()->info("yo button mouse button is down");
 				mouseButtonPressed = true;
 			}
 			else if (e.type == SDL_MOUSEBUTTONUP) {
-				std::cout << "yo button is up" << std::endl;
+				Logger::getInstance()->info("yo button mouse button is up");
 				mouseButtonPressed = false;
 				x = 0;
 				y = 0;
@@ -46,10 +47,7 @@ void Simulation::simulate() {
 		//Clear screen
 		SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
 		SDL_RenderClear(renderer);
-		//std::cout << Math::roundToNearestMultiple(244, 5) << std::endl;
 		
-		logger.info(std::to_string(Math::roundToNearestMultiple(244, 5)));
-
 		if (mouseButtonPressed) {
 			SDL_GetMouseState(&x, &y);
 			x = Math::roundToNearestMultiple(x, 5);
@@ -80,7 +78,8 @@ bool Simulation::simulationInit() {
 	window = NULL;
 	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		printf("Error while initializing SDL2: %s\n", SDL_GetError());
+		std::string errorMessage = "Error while initializing SDL2: ";
+		Logger::getInstance()->error(errorMessage.append(SDL_GetError()));
 		return false;
 	}
 
@@ -94,7 +93,8 @@ bool Simulation::simulationInit() {
 	);
 
 	if (window == nullptr) {
-		printf("Error while creating window: %s\n", SDL_GetError());
+		std::string errorMessage = "Error while creating window: ";
+		Logger::getInstance()->error(errorMessage.append(SDL_GetError()));
 		return false;
 	}
 
@@ -102,7 +102,8 @@ bool Simulation::simulationInit() {
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == NULL)
 	{
-		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+		std::string errorMessage = "Renderer could not be created! SDL Error: ";
+		Logger::getInstance()->error(errorMessage.append(SDL_GetError()));
 	}
 
 	//Initialize renderer color

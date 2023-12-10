@@ -13,7 +13,7 @@ int GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 		return gameTiles[x + xOffset][y + yOffset];
 	}
 	else {
-		std::cout << "ERROR WE ARE OUT OF BOUNDS";
+		Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		return -1;
 	}
 }
@@ -32,7 +32,7 @@ bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, int value) {
 		return true;
 	}
 	else {
-		std::cout << "ERROR WE ARE OUT OF BOUNDS";
+		Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		return false;
 	}
 }
