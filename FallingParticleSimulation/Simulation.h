@@ -4,6 +4,7 @@
 #include "GameTiles.h"
 #include "Math.h"
 #include "Logger.h"
+#include "InputHandler.h"
 
 class Simulation
 {
@@ -13,11 +14,11 @@ class Simulation
 
 		~Simulation();
 
-		void render(bool mouseButtonPressed);
+		void render();
 
 		void simulate();
 
-		void step(bool* mouseButtonPressed, bool* quit);
+		void step(bool* quit);
 
 
 	private:
@@ -30,6 +31,8 @@ class Simulation
 		SDL_Window* window;
 
 		SDL_Renderer* renderer;
+
+		InputHandler inputHandler;
 
 		bool simulationInit();
 
