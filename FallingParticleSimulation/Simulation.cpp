@@ -20,59 +20,62 @@ void Simulation::simulate() {
 
 	bool quit = false;
 	bool mouseButtonPressed = false;
-	SDL_Event e;
-	int x = 0, y = 0;
 
 	while (!quit) {
 
-		while (SDL_PollEvent(&e) != 0) {
-			// user requests to quit
-			if (e.type == SDL_QUIT) {
-				quit = true;
-			}
-
-			else if (e.type == SDL_MOUSEBUTTONDOWN) {
-				Logger::getInstance()->info("yo button mouse button is down");
-				mouseButtonPressed = true;
-			}
-			else if (e.type == SDL_MOUSEBUTTONUP) {
-				Logger::getInstance()->info("yo button mouse button is up");
-				mouseButtonPressed = false;
-				x = 0;
-				y = 0;
-			}
-		}
-
-
-		//Clear screen
-		SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
-		SDL_RenderClear(renderer);
-		
-		if (mouseButtonPressed) {
-			SDL_GetMouseState(&x, &y);
-			x = Math::roundToNearestMultiple(x, 5);
-			y = Math::roundToNearestMultiple(y, 5);
-			gameTiles.setTile(x / 5, y / 5, 0, 0, createSandParticle());
-		}
-
-		for (int i = 0; i < gameTiles.getRowCount(); i++) {
-			for (int j = 0; j < gameTiles.getColumnCount(); j++) {
-				if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-					Draw::drawRect(renderer, i * 5, j * 5, 5, 5);
-				}
-			}
-		}
-		SDL_RenderPresent(renderer);
+		step(&mouseButtonPressed, &quit);
+		// draw to screen
+		render(mouseButtonPressed);
 	}
 
 }
 
-void Simulation::render() {
+// TODO: use input handle instead of passing around this gross bools
+void Simulation::render(bool mouseButtonPressed) {
+	//Clear screen
+	SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
+	SDL_RenderClear(renderer);
+	int x = 0, y = 0;
+
+	if (mouseButtonPressed) {
+		SDL_GetMouseState(&x, &y);
+		x = Math::roundToNearestMultiple(x, 5);
+		y = Math::roundToNearestMultiple(y, 5);
+		gameTiles.setTile(x / 5, y / 5, 0, 0, createSandParticle());
+	}
+
+	for (int i = 0; i < gameTiles.getRowCount(); i++) {
+		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
+			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
+				Draw::drawRect(renderer, i * 5, j * 5, 5, 5);
+			}
+		}
+	}
+	SDL_RenderPresent(renderer);
 
 }
 
-void Simulation::step() {
-	
+// TODO: use input handle instead of passing around this gross bools
+void Simulation::step(bool* mouseButtonPressed, bool* quit) {
+	SDL_Event e;
+
+	//TODO: input logic will move to a class in the future
+	while (SDL_PollEvent(&e) != 0) {
+		// user requests to quit
+		if (e.type == SDL_QUIT) {
+			*quit = true;
+		}
+
+		else if (e.type == SDL_MOUSEBUTTONDOWN) {
+			Logger::getInstance()->info("yo button mouse button is down");
+			*mouseButtonPressed = true;
+		}
+		else if (e.type == SDL_MOUSEBUTTONUP) {
+			Logger::getInstance()->info("yo button mouse button is up");
+			*mouseButtonPressed = false;
+		}
+	}
+
 }
 
 

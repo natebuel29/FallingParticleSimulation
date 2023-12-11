@@ -13,11 +13,11 @@ class Simulation
 
 		~Simulation();
 
-		void render();
+		void render(bool mouseButtonPressed);
 
 		void simulate();
 
-		void step();
+		void step(bool* mouseButtonPressed, bool* quit);
 
 
 	private:
