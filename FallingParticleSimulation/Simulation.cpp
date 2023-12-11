@@ -52,18 +52,22 @@ void Simulation::simulate() {
 			SDL_GetMouseState(&x, &y);
 			x = Math::roundToNearestMultiple(x, 5);
 			y = Math::roundToNearestMultiple(y, 5);
-			gameTiles.setTile(x / 5, y / 5, 0, 0, 1);
+			gameTiles.setTile(x / 5, y / 5, 0, 0, createSandParticle());
 		}
 
 		for (int i = 0; i < gameTiles.getRowCount(); i++) {
 			for (int j = 0; j < gameTiles.getColumnCount(); j++) {
-				if (gameTiles.getTile(i, j, 0, 0) == 1) {
+				if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
 					Draw::drawRect(renderer, i * 5, j * 5, 5, 5);
 				}
 			}
 		}
 		SDL_RenderPresent(renderer);
 	}
+
+}
+
+void Simulation::render() {
 
 }
 

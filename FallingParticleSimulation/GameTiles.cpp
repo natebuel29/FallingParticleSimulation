@@ -2,19 +2,21 @@
 
 //public
 // Default constructor providing a default state
-GameTiles::GameTiles() : rows(0), columns(0.0) {
+GameTiles::GameTiles() : rows(0), columns(0) {
 }
 
-GameTiles::GameTiles(int r,int c) : gameTiles(rows, std::vector<int>(columns, 0)),rows(r),columns(c) {
+GameTiles::GameTiles(int r, int c) : rows(r), columns(c) {
+	gameTiles = std::vector<std::vector<Particle>>(rows, std::vector<Particle>(columns, createEmptyParticle()));
+
 }
 
-int GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
+Particle GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 	if (isInBounds( x,  y,  xOffset,  yOffset)) {
 		return gameTiles[x + xOffset][y + yOffset];
 	}
 	else {
 		Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
-		return -1;
+		return createOutOfBoundsParticle();
 	}
 }
 
@@ -26,7 +28,7 @@ int GameTiles::getColumnCount() {
 	return columns;
 }
 
-bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, int value) {
+bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, Particle value) {
 	if (isInBounds( x,  y,  xOffset,  yOffset)) {
 		gameTiles[x + xOffset][y + yOffset] = value;
 		return true;

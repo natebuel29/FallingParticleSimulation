@@ -1,9 +1,9 @@
 #pragma once
 #include <SDL.h>
+#include <string>
 #include "GameTiles.h"
 #include "Math.h"
 #include "Logger.h"
-#include <string>
 
 class Simulation
 {
@@ -12,6 +12,8 @@ class Simulation
 		Simulation(int width, int height);
 
 		~Simulation();
+
+		void render();
 
 		void simulate();
 

@@ -137,11 +137,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Draw.h" />
     <ClInclude Include="GameTiles.h" />
+    <ClInclude Include="Particles.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Simulation.h" />
