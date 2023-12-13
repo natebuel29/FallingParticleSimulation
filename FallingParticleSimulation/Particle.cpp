@@ -9,6 +9,7 @@ Particle createEmptyParticle() {
 Particle createSandParticle() {
 	Particle sand = Particle();
 	sand.type = ParticleType::SAND;
+	sand.color = Color::LIGHT_BROWN;
 	return sand;
 }
 

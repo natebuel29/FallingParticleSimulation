@@ -1,10 +1,15 @@
 #pragma once
 #include <SDL.h>
-#include <string>
 #include "GameTiles.h"
 #include "Math.h"
-#include "Logger.h"
 #include "InputHandler.h"
+#include "Draw.h"
+#include "Logger.h"
+#include "Colors.h"
+#include <string>
+#include <iostream>
+
+
 
 class Simulation
 {

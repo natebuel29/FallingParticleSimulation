@@ -1,8 +1,4 @@
 #include "Simulation.h"
-#include <iostream>
-#include "Draw.h"
-#include "Logger.h"
-#include <string>
 
 // PUBLIC
 
@@ -48,7 +44,8 @@ void Simulation::render() {
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-				Draw::drawRect(renderer, i * 5, j * 5, 5, 5);
+				RGB rgb = getRGBFromColor(gameTiles.getTile(i, j, 0, 0).color);
+				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,rgb.r,rgb.g,rgb.b,rgb.a);
 			}
 		}
 	}
