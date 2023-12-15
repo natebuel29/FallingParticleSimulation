@@ -15,7 +15,7 @@ Particle GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 		return gameTiles[x + xOffset][y + yOffset];
 	}
 	else {
-		Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
+	//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		return createOutOfBoundsParticle();
 	}
 }
@@ -40,5 +40,5 @@ bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, Particle value) 
 }
 
 bool GameTiles::isInBounds(int x, int y, int xOffset, int yOffset) {
-	return (x + xOffset < rows && x - xOffset >= 0 && y - yOffset < columns && y + yOffset >= 0);
+	return (x + xOffset < rows && x + xOffset >= 0 && y + yOffset >= 0 && y + yOffset < columns);
 }

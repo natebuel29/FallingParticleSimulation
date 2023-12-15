@@ -3,6 +3,6 @@
 enum PhysicsType {
 	WATER,
 	SOLID,
-	SAND,
+	SAND_,
 	GAS
 };
