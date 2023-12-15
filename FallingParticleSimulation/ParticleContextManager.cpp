@@ -22,5 +22,5 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 }
 
 ParticleContextManager::ParticleContextManager() {
-	sand = ParticleContext(PhysicsType::SAND_, RGB{ 194,178,178,1 });
+	sand = ParticleContext(PhysicsType::pSAND, RGB{ 194,178,128,1 });
 }

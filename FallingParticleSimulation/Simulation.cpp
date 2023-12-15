@@ -35,8 +35,8 @@ void Simulation::render() {
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-				RGB rgb = getRGBFromColor(gameTiles.getTile(i, j, 0, 0).color);
-				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,rgb.r,rgb.g,rgb.b,rgb.a);
+				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
+				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
 			}
 		}
 	}

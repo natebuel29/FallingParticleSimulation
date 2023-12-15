@@ -19,7 +19,6 @@ RGB getRGBFromColor(Color color) {
 		case Color::LIGHT_BROWN:
 			rgb.r = 194;
 			rgb.g = 178;
-			rgb.g = 178;
 			rgb.b = 128;
 			rgb.a = 1;
 			break;

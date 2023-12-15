@@ -1,8 +1,8 @@
 #pragma once
 
 enum PhysicsType {
-	WATER,
-	SOLID,
-	SAND_,
-	GAS
+	pLIQUID,
+	pSOLID,
+	pSAND,
+	pGAS
 };
