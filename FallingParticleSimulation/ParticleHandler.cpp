@@ -5,18 +5,21 @@ ParticleHandler::ParticleHandler() {
 
 void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y) {
 	Particle particle = gameTiles->getTile(x, y, 0, 0);
+	ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle.type);
+
 	// Handle Physic
-	switch (particle.type) {
-		case ParticleType::SAND:
-			handleSand(gameTiles, x, y);
+	switch (context->getPhysics()) {
+		case PhysicsType::pSAND:
+			handleSand(gameTiles, context, x, y);
 	}
 
 
 	// Handle corrosive
-	// Handle
+	// Handle flame
+	// handle combining with neighbors
 }
 
-void ParticleHandler::handleSand(GameTiles* gameTiles, int x, int y){
+void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y){
 	Particle sand = gameTiles->getTile(x, y, 0, 0);
 	if (gameTiles->getTile(x, y, 0, 1).type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);

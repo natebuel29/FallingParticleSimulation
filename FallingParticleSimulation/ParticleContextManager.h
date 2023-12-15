@@ -1,6 +1,7 @@
 #pragma once
 #include "ParticleContext.h"
 #include "Particles.h"
+#include "Logger.h"
 #include <string>
 
 class ParticleContextManager

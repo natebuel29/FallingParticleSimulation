@@ -49,7 +49,7 @@ void Simulation::step() {
 
 	for (int j = gameTiles.getColumnCount() -1; j >= 0; j--) {
 		for (int i = gameTiles.getRowCount()-1; i >= 0; i--) {
-			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY || gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS) {
+			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY && gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS) {
 				parHandler.handleParticle(&gameTiles, i, j);
 			}
 		}

@@ -9,6 +9,5 @@ class ParticleHandler
 		ParticleHandler();
 		void handleParticle(GameTiles* gameTiles, int x, int y);
 	private:
-		void handleSand(GameTiles* gameTiles, int x, int y);
+		void handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 };
-

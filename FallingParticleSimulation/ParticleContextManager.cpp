@@ -17,7 +17,9 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 		case ParticleType::SAND:
 			particleContext = &sand;
 	}
-	
+	if (particleContext == nullptr) {
+		Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG")
+	}
 	return &sand;
 }
 
