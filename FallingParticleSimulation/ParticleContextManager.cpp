@@ -1,9 +1,15 @@
 #include "ParticleContextManager.h"
 
-ParticleContextManager::ParticleContextManager(){
-	sand = ParticleContext(PhysicsType::SAND_, RGB{ 194,178,178,1 });
-}
+// Public
+ParticleContextManager* ParticleContextManager::instance = nullptr;
 
+ParticleContextManager* ParticleContextManager::getInstance() {
+	if (instance == nullptr) {
+		instance = new ParticleContextManager();
+	}
+
+	return instance;
+}
 ParticleContext* ParticleContextManager::getParticleContext(ParticleType particle) {
 	ParticleContext* particleContext = nullptr;
 
@@ -13,4 +19,8 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 	}
 	
 	return &sand;
+}
+
+ParticleContextManager::ParticleContextManager() {
+	sand = ParticleContext(PhysicsType::SAND_, RGB{ 194,178,178,1 });
 }

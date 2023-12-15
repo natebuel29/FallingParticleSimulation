@@ -1,7 +1,6 @@
 #include "ParticleHandler.h"
 
 ParticleHandler::ParticleHandler() {
-	contextManager = ParticleContextManager();
 }
 
 void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y) {

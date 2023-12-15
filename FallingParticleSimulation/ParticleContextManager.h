@@ -5,11 +5,18 @@
 
 class ParticleContextManager
 {
-	public:
-		ParticleContextManager();
-		ParticleContext* getParticleContext(ParticleType particle);
+public:
+	ParticleContext* getParticleContext(ParticleType particle);
+	void operator=(const ParticleContextManager& other) = delete;
+	ParticleContextManager(const ParticleContextManager& other) = delete;
 
-	private:
-		ParticleContext sand;
+	static ParticleContextManager* getInstance();
+
+	static ParticleContextManager* instance;
+private:
+	ParticleContext sand;
+	ParticleContextManager();
+
+
 };
 

@@ -40,9 +40,6 @@ class Simulation
 		SDL_Renderer* renderer;
 
 		InputHandler inputHandler;
-		
-		//TODO: delete this ?
-		ParticleContextManager pcManager;
 
 		ParticleHandler parHandler;
 

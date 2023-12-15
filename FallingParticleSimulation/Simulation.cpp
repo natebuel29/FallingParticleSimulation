@@ -107,8 +107,6 @@ bool Simulation::simulationInit() {
 	gameTiles = GameTiles(this->width / 5, this->height / 5);
 
 	inputHandler = InputHandler();
-
-	pcManager = ParticleContextManager();
 	
 	parHandler = ParticleHandler();
 
