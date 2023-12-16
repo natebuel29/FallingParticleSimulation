@@ -23,7 +23,7 @@ RGB getRGBFromColor(Color color) {
 			rgb.a = 1;
 			break;
 		default:
-			Logger::getInstance()->warn("WHAAT WE DONT HAVE THAT COLOR?!"); \
+			Logger::getInstance()->warn("WHAAT WE DONT HAVE THAT COLOR?!"); 
 			break;
 	}
 

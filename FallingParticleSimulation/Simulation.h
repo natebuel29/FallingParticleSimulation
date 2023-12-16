@@ -43,6 +43,8 @@ class Simulation
 
 		ParticleHandler parHandler;
 
+		int fpsCount = 0;
+
 		bool simulationInit();
 
 		void destroy();

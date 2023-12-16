@@ -8,7 +8,9 @@ class ParticleContextManager
 {
 public:
 	ParticleContext* getParticleContext(ParticleType particle);
+	
 	void operator=(const ParticleContextManager& other) = delete;
+	
 	ParticleContextManager(const ParticleContextManager& other) = delete;
 
 	static ParticleContextManager* getInstance();
@@ -16,8 +18,9 @@ public:
 	static ParticleContextManager* instance;
 private:
 	ParticleContext sand;
+	ParticleContext water;
+	
 	ParticleContextManager();
-
-
 };
+
 

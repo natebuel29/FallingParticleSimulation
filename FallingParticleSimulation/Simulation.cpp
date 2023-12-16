@@ -21,6 +21,7 @@ void Simulation::simulate() {
 		// draw to screen
 		render();
 
+		fpsCount++;
 		quit = inputHandler.shouldQuit();
 	}
 
@@ -46,9 +47,9 @@ void Simulation::render() {
 
 // TODO: use input handle instead of passing around this gross bools
 void Simulation::step() {
-
+	bool isEvenFrame = fpsCount % 2 == 0;
 	for (int j = gameTiles.getColumnCount() -1; j >= 0; j--) {
-		for (int i = gameTiles.getRowCount()-1; i >= 0; i--) {
+		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount(); isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
 			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY && gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS) {
 				parHandler.handleParticle(&gameTiles, i, j);
 			}
@@ -62,7 +63,7 @@ void Simulation::step() {
 		inputHandler.getMousePosition(&x, &y);
 		x = Math::roundToNearestMultiple(x, 5);
 		y = Math::roundToNearestMultiple(y, 5);
-		gameTiles.setTile(x / 5, y / 5, 0, 0, createSandParticle());
+		gameTiles.setTile(x / 5, y / 5, 0, 0, createWaterParticle());
 	}
 }
 

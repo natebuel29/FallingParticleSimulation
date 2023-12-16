@@ -16,13 +16,18 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 	switch (particle) {
 		case ParticleType::SAND:
 			particleContext = &sand;
+			break;
+		case ParticleType::WATER:
+			particleContext = &water;
+			break;
 	}
 	if (particleContext == nullptr) {
-		Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG")
+		Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG");
 	}
-	return &sand;
+	return particleContext;
 }
 
 ParticleContextManager::ParticleContextManager() {
 	sand = ParticleContext(PhysicsType::pSAND, RGB{ 194,178,128,1 });
+	water = ParticleContext(PhysicsType::pLIQUID, RGB{ 15,94,156 });
 }
