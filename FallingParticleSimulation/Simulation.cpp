@@ -1,7 +1,6 @@
 #include "Simulation.h"
 
 // PUBLIC
-
 Simulation::Simulation(int w, int h):width(w), height(h) {
 	this->width = w;
 	this->height = h;
@@ -18,10 +17,11 @@ void Simulation::simulate() {
 
 	while (!quit) {
 
-		step(&quit);
+		step();
 		// draw to screen
 		render();
 
+		fpsCount++;
 		quit = inputHandler.shouldQuit();
 	}
 
@@ -32,20 +32,12 @@ void Simulation::render() {
 	//Clear screen
 	SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
 	SDL_RenderClear(renderer);
-	int x = 0, y = 0;
-
-	if (inputHandler.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
-		inputHandler.getMousePosition(&x, &y);
-		x = Math::roundToNearestMultiple(x, 5);
-		y = Math::roundToNearestMultiple(y, 5);
-		gameTiles.setTile(x / 5, y / 5, 0, 0, createSandParticle());
-	}
 
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-				RGB rgb = getRGBFromColor(gameTiles.getTile(i, j, 0, 0).color);
-				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,rgb.r,rgb.g,rgb.b,rgb.a);
+				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
+				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
 			}
 		}
 	}
@@ -54,8 +46,25 @@ void Simulation::render() {
 }
 
 // TODO: use input handle instead of passing around this gross bools
-void Simulation::step(bool* quit) {
+void Simulation::step() {
+	bool isEvenFrame = fpsCount % 2 == 0;
+	for (int j = gameTiles.getColumnCount() -1; j >= 0; j--) {
+		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount(); isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
+			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY && gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS) {
+				parHandler.handleParticle(&gameTiles, i, j);
+			}
+		}
+	}
 
+	
+	//Check for user input and create Sand Particle at mouse position
+	int x = 0, y = 0;
+	if (inputHandler.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
+		inputHandler.getMousePosition(&x, &y);
+		x = Math::roundToNearestMultiple(x, 5);
+		y = Math::roundToNearestMultiple(y, 5);
+		gameTiles.setTile(x / 5, y / 5, 0, 0, createWaterParticle());
+	}
 }
 
 
@@ -99,6 +108,8 @@ bool Simulation::simulationInit() {
 	gameTiles = GameTiles(this->width / 5, this->height / 5);
 
 	inputHandler = InputHandler();
+	
+	parHandler = ParticleHandler();
 
 	return true;
 }

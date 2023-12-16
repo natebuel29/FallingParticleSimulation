@@ -13,6 +13,14 @@ Particle createSandParticle() {
 	return sand;
 }
 
+Particle createWaterParticle() {
+	Particle water = Particle();
+	water.type = ParticleType::WATER;
+	water.color = Color::LIGHT_BROWN;
+	return water;
+}
+
+
 Particle createOutOfBoundsParticle() {
 	Particle oob = Particle();
 	oob.type = ParticleType::OUTOFBOUNDS;

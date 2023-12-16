@@ -6,6 +6,8 @@
 #include "Draw.h"
 #include "Logger.h"
 #include "Colors.h"
+#include "ParticleContextManager.h"
+#include "ParticleHandler.h"
 #include <string>
 #include <iostream>
 
@@ -23,7 +25,7 @@ class Simulation
 
 		void simulate();
 
-		void step(bool* quit);
+		void step();
 
 
 	private:
@@ -38,6 +40,10 @@ class Simulation
 		SDL_Renderer* renderer;
 
 		InputHandler inputHandler;
+
+		ParticleHandler parHandler;
+
+		int fpsCount = 0;
 
 		bool simulationInit();
 

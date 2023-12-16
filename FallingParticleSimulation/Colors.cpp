@@ -19,12 +19,11 @@ RGB getRGBFromColor(Color color) {
 		case Color::LIGHT_BROWN:
 			rgb.r = 194;
 			rgb.g = 178;
-			rgb.g = 178;
 			rgb.b = 128;
 			rgb.a = 1;
 			break;
 		default:
-			Logger::getInstance()->warn("WHAAT WE DONT HAVE THAT COLOR?!"); \
+			Logger::getInstance()->warn("WHAAT WE DONT HAVE THAT COLOR?!"); 
 			break;
 	}
 

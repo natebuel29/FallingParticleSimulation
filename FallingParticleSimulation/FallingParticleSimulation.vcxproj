@@ -140,13 +140,20 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleContext.cpp" />
+    <ClCompile Include="ParticleContextManager.cpp" />
+    <ClCompile Include="ParticleHandler.cpp" />
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Draw.h" />
     <ClInclude Include="GameTiles.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ParticleContextManager.h" />
+    <ClInclude Include="ParticleHandler.h" />
+    <ClInclude Include="PhysicsType.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="ParticleContext.h" />
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Math.h" />
