@@ -43,6 +43,8 @@ class Simulation
 
 		ParticleHandler parHandler;
 
+		ParticleCreationFunction createParticle;
+
 		int fpsCount = 0;
 
 		bool simulationInit();

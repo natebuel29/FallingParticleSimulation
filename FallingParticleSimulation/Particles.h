@@ -23,3 +23,7 @@ Particle createWaterParticle();
 
 //Not a big fan of this but something needs to be returned when we out of bounds
 Particle createOutOfBoundsParticle();
+
+typedef Particle(*ParticleCreationFunction)();
+
+void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle);

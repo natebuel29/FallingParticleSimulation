@@ -63,7 +63,7 @@ void Simulation::step() {
 		inputHandler.getMousePosition(&x, &y);
 		x = Math::roundToNearestMultiple(x, 5);
 		y = Math::roundToNearestMultiple(y, 5);
-		gameTiles.setTile(x / 5, y / 5, 0, 0, createWaterParticle());
+		gameTiles.setTile(x / 5, y / 5, 0, 0, createParticle());
 	}
 }
 
@@ -110,6 +110,8 @@ bool Simulation::simulationInit() {
 	inputHandler = InputHandler();
 	
 	parHandler = ParticleHandler();
+
+	updateCurrentParticle(createParticle, SAND);
 
 	return true;
 }
