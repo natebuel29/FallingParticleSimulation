@@ -26,3 +26,17 @@ Particle createOutOfBoundsParticle() {
 	oob.type = ParticleType::OUTOFBOUNDS;
 	return oob;
 }
+
+void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle) {
+	switch (particle) {
+		case SAND:
+			func = createSandParticle;
+			break;
+		case WATER:
+			func = createWaterParticle;
+			break;
+		default:
+			func = createSandParticle;
+			break;
+	}
+}

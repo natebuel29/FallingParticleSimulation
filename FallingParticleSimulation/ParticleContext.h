@@ -2,6 +2,7 @@
 #include "PhysicsType.h"
 #include "Colors.h"
 
+//Think of this as scriptable objects
 class ParticleContext
 {
 	public:

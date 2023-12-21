@@ -20,9 +20,7 @@ void InputHandler::inputHandlerInit() {
 	keyStates = SDL_GetKeyboardState(NULL);
 }
 
-bool InputHandler::shouldQuit() {
-	bool shouldQuit = false;
-
+void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit) {
 	SDL_Event e;
 
 	//TODO: I hate this and would like to refactor in future
@@ -31,11 +29,18 @@ bool InputHandler::shouldQuit() {
 		if (e.type == SDL_QUIT) {
 			shouldQuit = true;
 		}
+		else if (e.type == SDL_KEYDOWN) {
+			switch (e.key.keysym.sym) {
+				case(SDLK_s):
+					updateCurrentParticle(func, SAND);
+					break;
+				case(SDLK_w):
+					updateCurrentParticle(func, WATER);
+					break;
+				case(SDLK_ESCAPE):
+					shouldQuit = isKeyPressed(SDL_SCANCODE_ESCAPE);
+					break;
+			}
+		}
 	}
-
-	if (!shouldQuit) {
-		shouldQuit = isKeyPressed(SDL_SCANCODE_ESCAPE);
-	}
-
-	return shouldQuit;
 }
