@@ -22,7 +22,6 @@ void Simulation::simulate() {
 		render();
 
 		fpsCount++;
-		//quit = inputHandler.shouldQuit();
 	}
 
 }
