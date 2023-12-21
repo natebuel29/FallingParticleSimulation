@@ -16,13 +16,13 @@ void Simulation::simulate() {
 	bool quit = false;
 
 	while (!quit) {
-
+		inputHandler.pollEvents(createParticle, quit);
 		step();
 		// draw to screen
 		render();
 
 		fpsCount++;
-		quit = inputHandler.shouldQuit();
+		//quit = inputHandler.shouldQuit();
 	}
 
 }
