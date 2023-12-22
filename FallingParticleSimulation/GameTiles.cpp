@@ -34,7 +34,8 @@ bool GameTiles::setTile(int x, int y, int xOffset, int yOffset, Particle value) 
 		return true;
 	}
 	else {
-		Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
+	// commenting this out because of performance
+	//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		return false;
 	}
 }
