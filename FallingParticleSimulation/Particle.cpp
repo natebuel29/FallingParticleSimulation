@@ -10,6 +10,7 @@ Particle createSandParticle() {
 	Particle sand = Particle();
 	sand.type = ParticleType::SAND;
 	sand.color = Color::LIGHT_BROWN;
+	sand.processed = false;
 	return sand;
 }
 
@@ -17,6 +18,7 @@ Particle createWaterParticle() {
 	Particle water = Particle();
 	water.type = ParticleType::WATER;
 	water.color = Color::LIGHT_BROWN;
+	water.processed = false;
 	return water;
 }
 
@@ -24,6 +26,7 @@ Particle createWoodParticle() {
 	Particle wood = Particle();
 	wood.type = ParticleType::WOOD;
 	wood.color = Color::LIGHT_BROWN;
+	wood.processed = false;
 	return wood;
 }
 

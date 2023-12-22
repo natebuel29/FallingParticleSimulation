@@ -13,6 +13,7 @@ enum ParticleType : uint8_t {
 struct Particle {
 	ParticleType type;
 	Color color;
+	bool processed;
 	//turn these on eventually
 	//uint8_t life,
 	//uint8_t decayRate

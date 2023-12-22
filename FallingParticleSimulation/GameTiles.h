@@ -14,6 +14,7 @@ class GameTiles
 		GameTiles(int rows, int columns);
 
 		Particle getTile(int x, int y, int xOffset, int yOffset);
+		Particle* getTileAddress(int x, int y, int xOffset, int yOffset);
 		int getRowCount();
 		int getColumnCount();
 		bool setTile(int x, int y, int xOffset, int yOffset, Particle value);
