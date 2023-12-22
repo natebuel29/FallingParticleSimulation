@@ -42,6 +42,10 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 	}
 }
 
+void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+	//DO NOTHING BUT MAYBE THIS WILL DO SOMETHING IN FUTURE?!
+}
+
 void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
 	int disperseRate = 2;
 

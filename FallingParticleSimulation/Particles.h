@@ -6,7 +6,8 @@ enum ParticleType : uint8_t {
 	EMPTY,
 	OUTOFBOUNDS,
 	SAND,
-	WATER
+	WATER,
+	WOOD
 };
 
 struct Particle {
@@ -20,6 +21,7 @@ struct Particle {
 Particle createEmptyParticle();
 Particle createSandParticle();
 Particle createWaterParticle();
+Particle createWoodParticle();
 
 //Not a big fan of this but something needs to be returned when we out of bounds
 Particle createOutOfBoundsParticle();

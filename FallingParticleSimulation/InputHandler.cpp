@@ -37,6 +37,9 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 				case(SDLK_w):
 					updateCurrentParticle(func, WATER);
 					break;
+				case(SDLK_t):
+					updateCurrentParticle(func, WOOD);
+					break;
 				case(SDLK_1):
 					radius = 1;
 					break;

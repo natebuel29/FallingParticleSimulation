@@ -12,5 +12,6 @@ class ParticleHandler
 	private:
 		void handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void disperse(GameTiles* gameTiles, int x,int y, int direction, int disperseRate);
 };
