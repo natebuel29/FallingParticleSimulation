@@ -27,6 +27,8 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 	if (gameTiles->getTile(x, y, 0, 1).type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
 		Particle target = gameTiles->getTile(x, y, 0, 1);
+		current.processed = true;
+		target.processed = true;
 		gameTiles->setTile(x, y, 0, 1, current);
 		gameTiles->setTile(x, y, 0, 0, target);
 	}
@@ -36,6 +38,8 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 		if (gameTiles->getTile(x, y, direction, 1).type == EMPTY) {
 			Particle current = gameTiles->getTile(x, y, 0, 0);
 			Particle target = gameTiles->getTile(x, y, direction, 1);
+			current.processed = true;
+			target.processed = true;
 			gameTiles->setTile(x, y, direction, 1, current);
 			gameTiles->setTile(x, y, 0, 0, target);
 		}
@@ -47,11 +51,13 @@ void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
 }
 
 void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
-	int disperseRate = 2;
+	int disperseRate = 3;
 
 	if (gameTiles->getTile(x, y, 0, 1).type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
 		Particle target = gameTiles->getTile(x, y, 0, 1);
+		current.processed = true;
+		target.processed = true;
 		gameTiles->setTile(x, y, 0, 1, current);
 		gameTiles->setTile(x, y, 0, 0, target);
 	}
@@ -61,6 +67,8 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		if (gameTiles->getTile(x, y, direction, 1).type == EMPTY) {
 			Particle current = gameTiles->getTile(x, y, 0, 0);
 			Particle target = gameTiles->getTile(x, y, direction, 1);
+			current.processed = true;
+			target.processed = true;
 			gameTiles->setTile(x, y, direction, 1, current);
 			gameTiles->setTile(x, y, 0, 0, target);
 		}
@@ -68,12 +76,16 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 	else if (gameTiles->getTile(x, y, -1, 1).type == EMPTY) {
 			Particle current = gameTiles->getTile(x, y, 0, 0);
 			Particle target = gameTiles->getTile(x, y, -1, 1);
+			current.processed = true;
+			target.processed = true;
 			gameTiles->setTile(x, y, -1, 1, current);
 			gameTiles->setTile(x, y, 0, 0, target);
 	}
 	else if (gameTiles->getTile(x, y, 1, 1).type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
 		Particle target = gameTiles->getTile(x, y, 1, 1);
+		current.processed = true;
+		target.processed = true;
 		gameTiles->setTile(x, y, 1, 1, current);
 		gameTiles->setTile(x, y, 0, 0, target);
 	}
@@ -107,6 +119,8 @@ void ParticleHandler::disperse(GameTiles* gameTiles, int x, int y, int direction
 
 	Particle current = gameTiles->getTile(x, y, 0, 0);
 	Particle target = gameTiles->getTile(x, y, openTile, 0);
+	current.processed = true;
+	target.processed = true;
 	gameTiles->setTile(x, y, openTile, 0, current);
 	gameTiles->setTile(x, y, 0, 0, target);
 }

@@ -10,6 +10,8 @@ GameTiles::GameTiles(int r, int c) : rows(r), columns(c) {
 
 }
 
+//Should this return a pointer?
+//Should there be another function that 
 Particle GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 	if (isInBounds( x,  y,  xOffset,  yOffset)) {
 		return gameTiles[x + xOffset][y + yOffset];
@@ -17,6 +19,17 @@ Particle GameTiles::getTile(int x, int y, int xOffset, int yOffset) {
 	else {
 	//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		return createOutOfBoundsParticle();
+	}
+}
+
+Particle* GameTiles::getTileAddress(int x, int y, int xOffset, int yOffset) {
+	if (isInBounds(x, y, xOffset, yOffset)) {
+		return &gameTiles[x + xOffset][y + yOffset];
+	}
+	else {
+		//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
+		Particle oob = createOutOfBoundsParticle();
+		return &oob;
 	}
 }
 
