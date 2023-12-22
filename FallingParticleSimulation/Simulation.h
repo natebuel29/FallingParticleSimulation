@@ -32,6 +32,8 @@ class Simulation
 		int width, height;
 	
 		const int tileSize = 5;
+
+		int radius = 10;
 		
 		GameTiles gameTiles;
 
@@ -46,6 +48,8 @@ class Simulation
 		ParticleCreationFunction createParticle;
 
 		int fpsCount = 0;
+
+		void fillCircle(int centerX, int centerY, int radius);
 
 		bool simulationInit();
 

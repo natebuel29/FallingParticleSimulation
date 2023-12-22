@@ -37,9 +37,11 @@ void Simulation::render() {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
 				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
+
 			}
 		}
 	}
+//	Draw::drawCircle(renderer, 248,300, 20, 194, 178, 128, 1);
 	SDL_RenderPresent(renderer);
 
 }
@@ -62,7 +64,7 @@ void Simulation::step() {
 		inputHandler.getMousePosition(&x, &y);
 		x = Math::roundToNearestMultiple(x, 5);
 		y = Math::roundToNearestMultiple(y, 5);
-		gameTiles.setTile(x / 5, y / 5, 0, 0, createParticle());
+		fillCircle(x, y, radius);
 	}
 }
 
@@ -113,6 +115,23 @@ bool Simulation::simulationInit() {
 	updateCurrentParticle(createParticle, SAND);
 
 	return true;
+}
+
+void Simulation::fillCircle(int centerX, int centerY, int radius) {
+	centerX = Math::roundToNearestMultiple(centerX, 5);
+	centerY = Math::roundToNearestMultiple(centerY, 5);
+
+	//how inefficient will this be?
+	for (int i = 1; i < 36; i++) {
+		double radians = i * 5 * M_PI / 180;
+		int x = centerX + radius * (cos(radians));
+		int y = centerY + radius * (sin(radians));
+		int minus_y = centerY - radius * (sin(radians));
+
+		for (int j = minus_y; j < y; j++) {
+			gameTiles.setTile(Math::roundToNearestMultiple(x, 5) / 5, Math::roundToNearestMultiple(j, 5) / 5, 0, 0, createParticle());
+		}
+	}
 }
 
 void Simulation::destroy() {
