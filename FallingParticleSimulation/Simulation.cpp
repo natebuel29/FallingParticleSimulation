@@ -41,7 +41,6 @@ void Simulation::render() {
 			}
 		}
 	}
-//	Draw::drawCircle(renderer, 248,300, 20, 194, 178, 128, 1);
 	SDL_RenderPresent(renderer);
 
 }
@@ -68,7 +67,6 @@ void Simulation::step() {
 
 
 // PRIVATE
-
 bool Simulation::simulationInit() {
 	window = NULL;
 	
