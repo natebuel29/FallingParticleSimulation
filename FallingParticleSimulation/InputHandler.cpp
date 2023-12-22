@@ -20,7 +20,7 @@ void InputHandler::inputHandlerInit() {
 	keyStates = SDL_GetKeyboardState(NULL);
 }
 
-void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit) {
+void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, int& radius) {
 	SDL_Event e;
 
 	//TODO: I hate this and would like to refactor in future
@@ -36,6 +36,18 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit) 
 					break;
 				case(SDLK_w):
 					updateCurrentParticle(func, WATER);
+					break;
+				case(SDLK_1):
+					radius = 1;
+					break;
+				case(SDLK_2):
+					radius = 10;
+					break;
+				case(SDLK_3):
+					radius = 20;
+					break;
+				case(SDLK_4):
+					radius = 30;
 					break;
 				case(SDLK_ESCAPE):
 					shouldQuit = isKeyPressed(SDL_SCANCODE_ESCAPE);

@@ -16,7 +16,7 @@ void Simulation::simulate() {
 	bool quit = false;
 
 	while (!quit) {
-		inputHandler.pollEvents(createParticle, quit);
+		inputHandler.pollEvents(createParticle, quit, radius);
 		step();
 		// draw to screen
 		render();
@@ -36,7 +36,7 @@ void Simulation::render() {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
-				Draw::drawRect(renderer, i * 5, j * 5, 5, 5,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
+				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
 
 			}
 		}
@@ -62,8 +62,6 @@ void Simulation::step() {
 	int x = 0, y = 0;
 	if (inputHandler.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
 		inputHandler.getMousePosition(&x, &y);
-		x = Math::roundToNearestMultiple(x, 5);
-		y = Math::roundToNearestMultiple(y, 5);
 		fillCircle(x, y, radius);
 	}
 }
@@ -106,7 +104,7 @@ bool Simulation::simulationInit() {
 	//Initialize renderer color
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	gameTiles = GameTiles(this->width / 5, this->height / 5);
+	gameTiles = GameTiles(this->width / tileSize, this->height / tileSize);
 
 	inputHandler = InputHandler();
 	
@@ -117,19 +115,25 @@ bool Simulation::simulationInit() {
 	return true;
 }
 
+//TODO: replace this with mid point circle algorithm?
 void Simulation::fillCircle(int centerX, int centerY, int radius) {
-	centerX = Math::roundToNearestMultiple(centerX, 5);
-	centerY = Math::roundToNearestMultiple(centerY, 5);
+	centerX = Math::roundToNearestMultiple(centerX, tileSize);
+	centerY = Math::roundToNearestMultiple(centerY, tileSize);
 
-	//how inefficient will this be?
-	for (int i = 1; i < 36; i++) {
-		double radians = i * 5 * M_PI / 180;
-		int x = centerX + radius * (cos(radians));
-		int y = centerY + radius * (sin(radians));
-		int minus_y = centerY - radius * (sin(radians));
+	if (radius == 1) {
+		gameTiles.setTile(centerX / tileSize, centerY / tileSize, 0, 0, createParticle());
+	}
+	else {
+		//how inefficient will this be?
+		for (int i = 1; i < 36; i++) {
+			double radians = i * tileSize * M_PI / 180;
+			int x = centerX + radius * (cos(radians));
+			int y = centerY + radius * (sin(radians));
+			int minus_y = centerY - radius * (sin(radians));
 
-		for (int j = minus_y; j < y; j++) {
-			gameTiles.setTile(Math::roundToNearestMultiple(x, 5) / 5, Math::roundToNearestMultiple(j, 5) / 5, 0, 0, createParticle());
+			for (int j = minus_y; j < y; j++) {
+				gameTiles.setTile(Math::roundToNearestMultiple(x, tileSize) / tileSize, Math::roundToNearestMultiple(j, tileSize) / tileSize, 0, 0, createParticle());
+			}
 		}
 	}
 }
