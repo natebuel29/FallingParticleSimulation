@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysicsType.h"
 #include "Colors.h"
+#include <array>
 
 //Think of this as scriptable objects
 class ParticleContext

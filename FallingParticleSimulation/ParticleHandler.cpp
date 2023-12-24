@@ -44,6 +44,36 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 			gameTiles->setTile(x, y, 0, 0, target);
 		}
 	}
+	else if (gameTiles->getTile(x, y, 0, 1).type != EMPTY && gameTiles->getTile(x,y,0,1).type != OUTOFBOUNDS) {
+		Particle target = gameTiles->getTile(x, y, 0, 1);
+		ParticleContext* targetContext = ParticleContextManager::getInstance()->getParticleContext(target.type);
+
+		if (targetContext->getPhysics() == pLIQUID) {
+			Particle current = gameTiles->getTile(x, y, 0, 0);
+			current.processed = true;
+			target.processed = true;
+			gameTiles->setTile(x, y, 0, 1, current);
+			gameTiles->setTile(x, y, 0, 0, target);
+		}
+	}
+
+	//else if (gameTiles->getTile(x, y, 1, 1).type != EMPTY && gameTiles->getTile(x, y, 1, 1).type != OUTOFBOUNDS) {
+	//	int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
+	//	Particle target = gameTiles->getTile(x, y, direction, 1);
+	//	ParticleContext* targetContext = ParticleContextManager::getInstance()->getParticleContext(target.type);
+
+	//	if (targetContext->getPhysics() == pLIQUID) {
+	//		Particle current = gameTiles->getTile(x, y, 0, 0);
+	//		current.processed = true;
+	//		target.processed = true;
+	//		gameTiles->setTile(x, y, direction, 1, current);
+	//		gameTiles->setTile(x, y, 0, 0, target);
+	//	}
+	//}
+	//else {
+	//	std::cout << "here?";
+	//}
+
 }
 
 void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
