@@ -44,6 +44,35 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 			gameTiles->setTile(x, y, 0, 0, target);
 		}
 	}
+	// TODO: THIS ISNT THE BEST WAY TO DO THIS. THIS MIGHT BREAK STUFF IN THE FUTURE!
+	// THE SWAPPABLE PARTICLE STUFF MIGHT WORK BETTER FOR THIS
+	else if (gameTiles->getTile(x, y, 0, 1).type != EMPTY && gameTiles->getTile(x, y, 0, 1).type != OUTOFBOUNDS && gameTiles->getTile(x, y, 0, 1).type != SAND) {
+		Particle target = gameTiles->getTile(x, y, 0, 1);
+		ParticleContext* targetContext = ParticleContextManager::getInstance()->getParticleContext(target.type);
+
+		if (targetContext->getPhysics() == pLIQUID) {
+			Particle current = gameTiles->getTile(x, y, 0, 0);
+			current.processed = true;
+			target.processed = true;
+			gameTiles->setTile(x, y, 0, 1, current);
+			gameTiles->setTile(x, y, 0, 0, target);
+		}
+	}
+	// SEE COMMENTS ABOVE
+	else if ((gameTiles->getTile(x, y, 1, 1).type != EMPTY && gameTiles->getTile(x, y, 1, 1).type != OUTOFBOUNDS && gameTiles->getTile(x, y, 1, 1).type != SAND) ||
+		(gameTiles->getTile(x, y, -1, 1).type != EMPTY && gameTiles->getTile(x, y, -1, 1).type != OUTOFBOUNDS && gameTiles->getTile(x, y, -1, 1).type != SAND)) {
+		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
+		Particle target = gameTiles->getTile(x, y, direction, 1);
+		ParticleContext* targetContext = ParticleContextManager::getInstance()->getParticleContext(target.type);
+
+		if (targetContext != nullptr &&targetContext->getPhysics() == pLIQUID) {
+			Particle current = gameTiles->getTile(x, y, 0, 0);
+			current.processed = true;
+			target.processed = true;
+			gameTiles->setTile(x, y, direction, 1, current);
+			gameTiles->setTile(x, y, 0, 0, target);
+		}
+	}
 }
 
 void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
