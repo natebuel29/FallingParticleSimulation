@@ -1,6 +1,7 @@
 #pragma once
 #include "Colors.h"
 #include <stdint.h>
+#include "Math.h"
 
 enum ParticleType : uint8_t {
 	EMPTY,
@@ -12,7 +13,7 @@ enum ParticleType : uint8_t {
 
 struct Particle {
 	ParticleType type;
-	Color color;
+	uint8_t colorIndex;
 	bool processed;
 	//turn these on eventually
 	//uint8_t life,

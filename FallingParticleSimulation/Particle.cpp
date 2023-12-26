@@ -9,7 +9,7 @@ Particle createEmptyParticle() {
 Particle createSandParticle() {
 	Particle sand = Particle();
 	sand.type = ParticleType::SAND;
-	sand.color = Color::LIGHT_BROWN;
+	sand.colorIndex = Math::getRandomInt(0,4);
 	sand.processed = false;
 	return sand;
 }
@@ -17,7 +17,7 @@ Particle createSandParticle() {
 Particle createWaterParticle() {
 	Particle water = Particle();
 	water.type = ParticleType::WATER;
-	water.color = Color::LIGHT_BROWN;
+	water.colorIndex = Math::getRandomInt(0, 4);
 	water.processed = false;
 	return water;
 }
@@ -25,7 +25,7 @@ Particle createWaterParticle() {
 Particle createWoodParticle() {
 	Particle wood = Particle();
 	wood.type = ParticleType::WOOD;
-	wood.color = Color::LIGHT_BROWN;
+	wood.colorIndex = Math::getRandomInt(0, 4);
 	wood.processed = false;
 	return wood;
 }

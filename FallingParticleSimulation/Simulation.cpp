@@ -37,14 +37,16 @@ void Simulation::render() {
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
-				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
+				Particle particle = gameTiles.getTile(i, j, 0, 0);
+				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle.type);
+				RGB rgb = context->getRGBFromArray(particle.colorIndex);
+				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb.r, rgb.g, rgb.b, rgb.a);
 
 			}
 		}
 	}
-	SDL_RenderPresent(renderer);
 
+	SDL_RenderPresent(renderer);
 }
 
 // TODO: use input handle instead of passing around this gross bools
@@ -54,7 +56,7 @@ void Simulation::step() {
 		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount(); isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
 			Particle particle = gameTiles.getTile(i, j, 0, 0);
 			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY && gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS && particle.processed == false) {
-				parHandler.handleParticle(&gameTiles, i, j);
+				parHandler.handleParticle(&gameTiles, i, j,fpsCount);
 			}
 		}
 	}

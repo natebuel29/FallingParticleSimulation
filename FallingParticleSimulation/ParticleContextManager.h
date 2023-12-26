@@ -3,6 +3,8 @@
 #include "Particles.h"
 #include "Logger.h"
 #include <string>
+#include <array>
+
 
 class ParticleContextManager
 {
