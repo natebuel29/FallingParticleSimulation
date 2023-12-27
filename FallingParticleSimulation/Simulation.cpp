@@ -15,8 +15,20 @@ void Simulation::simulate() {
 
 	bool quit = false;
 
+	int lastTime = SDL_GetTicks();
+	int currentTime;
+
 	while (!quit) {
 		inputHandler.pollEvents(createParticle, quit, radius);
+		currentTime = SDL_GetTicks();
+
+		if (currentTime - lastTime >= 1000) {
+			lastTime = currentTime;
+			std::string fpsString = "FPS COUNT: ";
+			SDL_SetWindowTitle(window, fpsString.append(std::to_string(fpsCount)).c_str());
+			fpsCount = 0;
+
+		}
 		step();
 		// draw to screen
 		render();
@@ -24,6 +36,7 @@ void Simulation::simulate() {
 		fpsCount++;
 
 		resetParticles();
+
 	}
 
 }
@@ -97,6 +110,7 @@ bool Simulation::simulationInit() {
 	}
 
 	//Create renderer for window
+	// use delta time for loop instead of vsync
 	renderer = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == NULL)
 	{
