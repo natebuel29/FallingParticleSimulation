@@ -15,15 +15,28 @@ void Simulation::simulate() {
 
 	bool quit = false;
 
+	int lastTime = SDL_GetTicks();
+	int currentTime;
+
 	while (!quit) {
 		inputHandler.pollEvents(createParticle, quit, radius);
+		currentTime = SDL_GetTicks();
+
+		if (currentTime - lastTime >= 1000) {
+			lastTime = currentTime;
+			std::string fpsString = "FPS COUNT: ";
+			SDL_SetWindowTitle(window, fpsString.append(std::to_string(fpsCount)).c_str());
+			fpsCount = 0;
+
+		}
 		step();
 		// draw to screen
 		render();
 
 		fpsCount++;
 
-		resetParticles();
+	//	resetParticles();
+
 	}
 
 }
@@ -37,14 +50,16 @@ void Simulation::render() {
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			if (gameTiles.getTile(i, j, 0, 0).type != ParticleType::EMPTY) {
-				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(gameTiles.getTile(i, j, 0, 0).type);
-				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize,context->getRGB().r, context->getRGB().g, context->getRGB().b, context->getRGB().a);
-
+				Particle particle = gameTiles.getTile(i, j, 0, 0);
+				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle.type);
+				RGB rgb = context->getRGBFromArray(particle.colorIndex);
+				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb.r, rgb.g, rgb.b, rgb.a);
+				gameTiles.getTileAddress(i, j, 0, 0)->processed = false;
 			}
 		}
 	}
-	SDL_RenderPresent(renderer);
 
+	SDL_RenderPresent(renderer);
 }
 
 // TODO: use input handle instead of passing around this gross bools
@@ -54,7 +69,7 @@ void Simulation::step() {
 		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount(); isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
 			Particle particle = gameTiles.getTile(i, j, 0, 0);
 			if (gameTiles.getTile(i, j, 0, 0).type != EMPTY && gameTiles.getTile(i, j, 0, 0).type != OUTOFBOUNDS && particle.processed == false) {
-				parHandler.handleParticle(&gameTiles, i, j);
+				parHandler.handleParticle(&gameTiles, i, j,fpsCount);
 			}
 		}
 	}
@@ -95,6 +110,7 @@ bool Simulation::simulationInit() {
 	}
 
 	//Create renderer for window
+	// use delta time for loop instead of vsync
 	renderer = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == NULL)
 	{

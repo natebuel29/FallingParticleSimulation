@@ -3,9 +3,14 @@
 ParticleHandler::ParticleHandler() {
 }
 
-void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y) {
+void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fpsCount) {
 	Particle particle = gameTiles->getTile(x, y, 0, 0);
 	ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle.type);
+
+	////Handle color update
+	if (fpsCount % 4 == 0 && context->shouldUpdateColor()) {
+		updateColor(gameTiles->getTileAddress(x, y, 0, 0));
+	}
 
 	// Handle Physic
 	switch (context->getPhysics()) {
@@ -75,7 +80,11 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 	}
 }
 
-void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+void ParticleHandler::updateColor(Particle* particle) {
+	particle->colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT-1);
+}
+
+void ParticleHandler::handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
 	//DO NOTHING BUT MAYBE THIS WILL DO SOMETHING IN FUTURE?!
 }
 
