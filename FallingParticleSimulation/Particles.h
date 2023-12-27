@@ -30,4 +30,6 @@ Particle createOutOfBoundsParticle();
 
 typedef Particle(*ParticleCreationFunction)();
 
+static int PARTICLE_COLOR_COUNT = 5;
+
 void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle);

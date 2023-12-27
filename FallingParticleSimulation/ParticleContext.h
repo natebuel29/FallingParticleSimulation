@@ -1,5 +1,6 @@
 #pragma once
 #include "PhysicsType.h"
+#include "Particles.h"
 #include "Colors.h"
 #include <array>
 

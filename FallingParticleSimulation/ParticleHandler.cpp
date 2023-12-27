@@ -81,7 +81,7 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 }
 
 void ParticleHandler::updateColor(Particle* particle) {
-	particle->colorIndex = Math::getRandomInt(0, 4);
+	particle->colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT-1);
 }
 
 void ParticleHandler::handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {

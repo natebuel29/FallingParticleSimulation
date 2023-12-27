@@ -35,7 +35,7 @@ void Simulation::simulate() {
 
 		fpsCount++;
 
-		resetParticles();
+	//	resetParticles();
 
 	}
 
@@ -54,7 +54,7 @@ void Simulation::render() {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle.type);
 				RGB rgb = context->getRGBFromArray(particle.colorIndex);
 				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb.r, rgb.g, rgb.b, rgb.a);
-
+				gameTiles.getTileAddress(i, j, 0, 0)->processed = false;
 			}
 		}
 	}
