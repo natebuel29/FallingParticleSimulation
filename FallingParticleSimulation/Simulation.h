@@ -49,6 +49,10 @@ class Simulation
 
 		int fpsCount = 0;
 
+		const int SCREEN_FPS = 60;
+		
+		const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
 		void fillCircle(int centerX, int centerY, int radius);
 
 		void resetParticles();

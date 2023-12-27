@@ -5,7 +5,7 @@
 #include "Simulation.h"
 
 int main(int argc, char* args[]){
-    Simulation sim = Simulation(1025, 480);
+    Simulation sim = Simulation(925, 500);
     sim.simulate();
 
     return 0;

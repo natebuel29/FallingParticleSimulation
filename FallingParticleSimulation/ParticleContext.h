@@ -12,7 +12,7 @@ class ParticleContext
 		ParticleContext() {}
 		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor) : physics(phy), colors(colorArray), updateColor(updateColor) {}
 		PhysicsType getPhysics();
-		RGB getRGBFromArray(int index);
+		RGB* getRGBFromArray(int index);
 		
 		bool shouldUpdateColor();
 	private:
