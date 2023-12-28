@@ -31,11 +31,11 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y){
 	if (gameTiles->getTile(x, y, 0, 1).type == EMPTY || gameTiles->getTile(x, y, 0, 1).type == WATER) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, 0, 1);
-		current.processed = true;
-		target.processed = true;
-		gameTiles->setTile(x, y, 0, 1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		current.vel += 1;
+		if (current.vel > 3) {
+			current.vel = 3;
+		}
+		accelerateDown(gameTiles, x, y, 1, current.vel);
 	}
 	else if (gameTiles->getTile(x, y, -1, 1).type == EMPTY || gameTiles->getTile(x, y, 1, 1).type == EMPTY || gameTiles->getTile(x, y, -1, 1).type == WATER || gameTiles->getTile(x, y, 1, 1).type == WATER) {
 		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
@@ -144,5 +144,31 @@ void ParticleHandler::disperse(GameTiles* gameTiles, int x, int y, int direction
 	current.processed = true;
 	target.processed = true;
 	gameTiles->setTile(x, y, openTile, 0, current);
+	gameTiles->setTile(x, y, 0, 0, target);
+}
+
+void ParticleHandler::accelerateDown(GameTiles* gameTiles, int x, int y, int direction, int disperseRate) {
+	int openTile = direction;
+
+	Particle current = gameTiles->getTile(x, y, 0, 0);
+	current.vel += 1;
+	if (current.vel > 3) {
+		current.vel = 3;
+	}
+
+	for (int i = std::abs(direction); i <= std::abs(direction * disperseRate); i++) {
+		int target = i * direction;
+		if (!gameTiles->getTile(x, y, 0, target).type == EMPTY) {
+			break;
+		}
+		else {
+			openTile = target;
+		}
+	}
+
+	Particle target = gameTiles->getTile(x, y, 0, openTile);
+	current.processed = true;
+	target.processed = true;
+	gameTiles->setTile(x, y, 0, openTile, current);
 	gameTiles->setTile(x, y, 0, 0, target);
 }

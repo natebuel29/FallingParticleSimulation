@@ -18,8 +18,8 @@ class ParticleContext
 	private:
 		PhysicsType physics;
 		std::array<RGB, 5> colors;
-
 		bool updateColor;
+		uint8_t maxVel = 3;
 		//Passable materials will go here i.e. water goes to top of acid
 		//bool isFlammable;
 		//bool isCorrodible;

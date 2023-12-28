@@ -10,6 +10,7 @@ Particle createSandParticle() {
 	Particle sand = Particle();
 	sand.type = ParticleType::SAND;
 	sand.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT-1);
+	sand.vel = 0;
 	sand.processed = false;
 	return sand;
 }

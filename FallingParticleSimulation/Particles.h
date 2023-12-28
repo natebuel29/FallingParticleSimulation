@@ -15,6 +15,7 @@ struct Particle {
 	ParticleType type;
 	uint8_t colorIndex;
 	bool processed;
+	uint8_t vel;
 	//turn these on eventually
 	//uint8_t life,
 	//uint8_t decayRate

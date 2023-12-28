@@ -15,4 +15,5 @@ class ParticleHandler
 		void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void updateColor(Particle* particle);
 		void disperse(GameTiles* gameTiles, int x,int y, int direction, int disperseRate);
+		void accelerateDown(GameTiles* gameTiles, int x, int y, int direction, int disperseRate);
 };
