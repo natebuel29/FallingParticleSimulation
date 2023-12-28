@@ -140,7 +140,7 @@ void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context
 
 	for (int i = std::abs(direction); i <= std::abs(direction * current.vel.x); i++) {
 		int target = i * direction;
-		if (!gameTiles->getTileAddress(x, y, target, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, target, 0)->type != WATER) {
+		if (!gameTiles->getTileAddress(x, y, target, 0)->type == EMPTY) {
 			if (gameTiles->getTileAddress(x, y, target, 0)->type == OUTOFBOUNDS) {
 				current.vel.x = 0.0f;
 			}
