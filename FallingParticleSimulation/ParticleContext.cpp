@@ -16,3 +16,11 @@ RGB* ParticleContext::getRGBFromArray(int index) {
 bool ParticleContext::shouldUpdateColor() {
 	return updateColor;
 }
+
+int ParticleContext::getMaxVel() {
+	return maxVel;
+}
+
+Vec2 ParticleContext::getDVelocity() {
+	return dVelocity;
+}

@@ -50,7 +50,7 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 					radius = 20;
 					break;
 				case(SDLK_4):
-					radius = 30;
+					radius = 50;
 					break;
 				case(SDLK_ESCAPE):
 					shouldQuit = isKeyPressed(SDL_SCANCODE_ESCAPE);

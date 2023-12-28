@@ -35,10 +35,10 @@ void Simulation::simulate() {
 
 		fpsCount++;
 
-		//int frameTime = SDL_GetTicks() - currentTime;
-		//if (frameTime < SCREEN_TICKS_PER_FRAME) {
-		//	SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTime);
-		//}
+		int frameTime = SDL_GetTicks() - currentTime;
+		if (frameTime < SCREEN_TICKS_PER_FRAME) {
+			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTime);
+		}
 
 	//	resetParticles();
 

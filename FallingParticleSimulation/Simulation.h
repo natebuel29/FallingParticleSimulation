@@ -55,8 +55,6 @@ class Simulation
 
 		void fillCircle(int centerX, int centerY, int radius);
 
-		void resetParticles();
-
 		bool simulationInit();
 
 		void destroy();

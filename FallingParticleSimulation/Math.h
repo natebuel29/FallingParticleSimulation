@@ -2,6 +2,11 @@
 #include <cmath>
 #include <random>
 
+struct Vec2 {
+	float x;
+	float y;
+};
+
 class Math
 {
 	public:

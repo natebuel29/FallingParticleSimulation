@@ -30,12 +30,7 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 
 void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y){
 	if (gameTiles->getTile(x, y, 0, 1).type == EMPTY || gameTiles->getTile(x, y, 0, 1).type == WATER) {
-		Particle current = gameTiles->getTile(x, y, 0, 0);
-		current.vel += 1;
-		if (current.vel > 3) {
-			current.vel = 3;
-		}
-		accelerateDown(gameTiles, x, y, 1, current.vel);
+		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (gameTiles->getTile(x, y, -1, 1).type == EMPTY || gameTiles->getTile(x, y, 1, 1).type == EMPTY || gameTiles->getTile(x, y, -1, 1).type == WATER || gameTiles->getTile(x, y, 1, 1).type == WATER) {
 		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
@@ -47,6 +42,9 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 			gameTiles->setTile(x, y, direction, 1, current);
 			gameTiles->setTile(x, y, 0, 0, target);
 		}
+	}
+	else {
+		gameTiles->getTileAddress(x, y, 0, 0)->vel.x = 0.0f;
 	}
 	//// TODO: THIS ISNT THE BEST WAY TO DO THIS. THIS MIGHT BREAK STUFF IN THE FUTURE!
 	//// THE SWAPPABLE PARTICLE STUFF MIGHT WORK BETTER FOR THIS
@@ -88,20 +86,15 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 	int disperseRate = 3;
 
 	if (gameTiles->getTileAddress(x, y, 0, 1)->type == EMPTY) {
-		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, 0, 1);
-		current.processed = true;
-		target.processed = true;
-		gameTiles->setTile(x, y, 0, 1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (gameTiles->getTileAddress(x, y, -1, 1)->type == EMPTY) {
-			Particle current = gameTiles->getTile(x, y, 0, 0);
-			Particle target = gameTiles->getTile(x, y, -1, 1);
-			current.processed = true;
-			target.processed = true;
-			gameTiles->setTile(x, y, -1, 1, current);
-			gameTiles->setTile(x, y, 0, 0, target);
+		Particle current = gameTiles->getTile(x, y, 0, 0);
+		Particle target = gameTiles->getTile(x, y, -1, 1);
+		current.processed = true;
+		target.processed = true;
+		gameTiles->setTile(x, y, -1, 1, current);
+		gameTiles->setTile(x, y, 0, 0, target);
 	}
 	else if (gameTiles->getTileAddress(x, y, 1, 1)->type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
@@ -111,35 +104,54 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		gameTiles->setTile(x, y, 1, 1, current);
 		gameTiles->setTile(x, y, 0, 0, target);
 	}
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, 1, 0)->type == WATER)) {
+		accelerateX(gameTiles, context, x, y, 1);
+	}
+
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, -1, 0)->type == WATER)) {
+		accelerateX(gameTiles, context, x, y, -1);
+	}
 	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
 		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
 		if (gameTiles->getTile(x, y, direction, 0).type == EMPTY) {
-			disperse(gameTiles, x, y, direction, disperseRate);
+			accelerateX(gameTiles, context, x, y, direction);
 		}
 	}
 	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY) {
-		disperse(gameTiles, x, y, -1, disperseRate);
+		accelerateX(gameTiles, context, x, y, -1);
 
 	}
 	else if (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
-		disperse(gameTiles, x, y, 1, disperseRate);
+		accelerateX(gameTiles, context, x, y, 1);
+	}
+	else {
+		gameTiles->getTileAddress(x, y, 0, 0)->vel = { 0.0f,0.0f };
 	}
 }
 
-void ParticleHandler::disperse(GameTiles* gameTiles, int x, int y, int direction, int disperseRate) {
+void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction){
 	int openTile = direction;
 
-	for (int i = std::abs(direction); i <= std::abs(direction * disperseRate); i++) {
+	Particle current = gameTiles->getTile(x, y, 0, 0);
+	current.vel.x += (context->getDVelocity().x) * direction;
+	if (std::abs(current.vel.x) > context->getMaxVel()) {
+		current.vel.x = context->getMaxVel() * direction;
+	}
+
+	for (int i = std::abs(direction); i <= std::abs(direction * current.vel.x); i++) {
 		int target = i * direction;
-		if (!gameTiles->getTile(x, y, target, 0).type == EMPTY) {
+		if (!gameTiles->getTileAddress(x, y, target, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, target, 0)->type != WATER) {
+			if (gameTiles->getTileAddress(x, y, target, 0)->type == OUTOFBOUNDS) {
+				current.vel.x = 0.0f;
+			}
 			break;
+
 		}
 		else {
 			openTile = target;
 		}
 	}
 
-	Particle current = gameTiles->getTile(x, y, 0, 0);
 	Particle target = gameTiles->getTile(x, y, openTile, 0);
 	current.processed = true;
 	target.processed = true;
@@ -147,16 +159,16 @@ void ParticleHandler::disperse(GameTiles* gameTiles, int x, int y, int direction
 	gameTiles->setTile(x, y, 0, 0, target);
 }
 
-void ParticleHandler::accelerateDown(GameTiles* gameTiles, int x, int y, int direction, int disperseRate) {
+void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction) {
 	int openTile = direction;
 
 	Particle current = gameTiles->getTile(x, y, 0, 0);
-	current.vel += 1;
-	if (current.vel > 3) {
-		current.vel = 3;
+	current.vel.y += (context->getDVelocity().y) * direction;
+	if (std::abs(current.vel.y) > context->getMaxVel()) {
+		current.vel.y = context->getMaxVel() * direction;
 	}
 
-	for (int i = std::abs(direction); i <= std::abs(direction * disperseRate); i++) {
+	for (int i = std::abs(direction); i <= std::abs(direction *((int) current.vel.y)); i++) {
 		int target = i * direction;
 		if (!gameTiles->getTile(x, y, 0, target).type == EMPTY) {
 			break;
