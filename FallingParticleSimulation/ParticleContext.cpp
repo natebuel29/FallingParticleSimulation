@@ -17,7 +17,7 @@ bool ParticleContext::shouldUpdateColor() {
 	return updateColor;
 }
 
-int ParticleContext::getMaxVel() {
+Vec2 ParticleContext::getMaxVel() {
 	return maxVel;
 }
 

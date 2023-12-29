@@ -44,7 +44,7 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 		}
 	}
 	else {
-		gameTiles->getTileAddress(x, y, 0, 0)->vel.x = 0.0f;
+		gameTiles->getTileAddress(x, y, 0, 0)->vel = {0.0f, 0.0f};
 	}
 	//// TODO: THIS ISNT THE BEST WAY TO DO THIS. THIS MIGHT BREAK STUFF IN THE FUTURE!
 	//// THE SWAPPABLE PARTICLE STUFF MIGHT WORK BETTER FOR THIS
@@ -134,8 +134,8 @@ void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context
 
 	Particle current = gameTiles->getTile(x, y, 0, 0);
 	current.vel.x += (context->getDVelocity().x) * direction;
-	if (std::abs(current.vel.x) > context->getMaxVel()) {
-		current.vel.x = context->getMaxVel() * direction;
+	if (std::abs(current.vel.x) > context->getMaxVel().x) {
+		current.vel.x = context->getMaxVel().x * direction;
 	}
 
 	for (int i = std::abs(direction); i <= std::abs(direction * current.vel.x); i++) {
@@ -164,8 +164,8 @@ void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context
 
 	Particle current = gameTiles->getTile(x, y, 0, 0);
 	current.vel.y += (context->getDVelocity().y) * direction;
-	if (std::abs(current.vel.y) > context->getMaxVel()) {
-		current.vel.y = context->getMaxVel() * direction;
+	if (std::abs(current.vel.y) > context->getMaxVel().y) {
+		current.vel.y = context->getMaxVel().y * direction;
 	}
 
 	for (int i = std::abs(direction); i <= std::abs(direction *((int) current.vel.y)); i++) {

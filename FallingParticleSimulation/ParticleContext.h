@@ -11,10 +11,10 @@ class ParticleContext
 	public:
 		//this shouldn't be used but idk how to make it so we don't need
 		ParticleContext() {}
-		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor) : physics(phy), colors(colorArray), updateColor(updateColor) {}
+		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor, Vec2 maxVelocity, Vec2 velocity) : physics(phy), colors(colorArray), updateColor(updateColor), dVelocity(velocity), maxVel(maxVelocity) {}
 		PhysicsType getPhysics();
 		RGB* getRGBFromArray(int index);
-		int getMaxVel();
+		Vec2 getMaxVel();
 		Vec2 getDVelocity();
 
 		bool shouldUpdateColor();
@@ -22,8 +22,8 @@ class ParticleContext
 		PhysicsType physics;
 		std::array<RGB, 5> colors;
 		bool updateColor;
-		int maxVel = 3;
-		Vec2 dVelocity = { 0.25f, 0.25f };
+		Vec2 maxVel;
+		Vec2 dVelocity;
 		//Passable materials will go here i.e. water goes to top of acid
 		//bool isFlammable;
 		//bool isCorrodible;
