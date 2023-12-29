@@ -10,6 +10,7 @@ Particle createSandParticle() {
 	Particle sand = Particle();
 	sand.type = ParticleType::SAND;
 	sand.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT-1);
+	sand.vel = {0.0f,0.0f};
 	sand.processed = false;
 	return sand;
 }
@@ -18,6 +19,7 @@ Particle createWaterParticle() {
 	Particle water = Particle();
 	water.type = ParticleType::WATER;
 	water.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT-1);
+	water.vel = { 0.0f,0.0f };
 	water.processed = false;
 	return water;
 }
