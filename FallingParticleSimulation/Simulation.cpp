@@ -70,7 +70,7 @@ void Simulation::render() {
 // TODO: use input handle instead of passing around this gross bools
 void Simulation::step() {
 	bool isEvenFrame = fpsCount % 2 == 0;
-	for (int j = 0; j < gameTiles.getColumnCount()-1; j++) {
+	for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount()-1; isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
 			Particle* particle = gameTiles.getTileAddress(i, j, 0, 0);
 			if (particle->type != EMPTY && particle->processed == false) {

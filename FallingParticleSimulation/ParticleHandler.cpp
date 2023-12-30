@@ -83,8 +83,6 @@ void ParticleHandler::handleSolid(GameTiles* gameTiles, ParticleContext* context
 }
 
 void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
-	int disperseRate = 3;
-
 	if (gameTiles->getTileAddress(x, y, 0, 1)->type == EMPTY) {
 		accelerateY(gameTiles, context, x, y, 1);
 	}

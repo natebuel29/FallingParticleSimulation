@@ -49,6 +49,9 @@ void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle
 		case WOOD:
 			func = createWoodParticle;
 			break;
+		case EMPTY:
+			func = createEmptyParticle;
+			break;
 		default:
 			func = createSandParticle;
 			break;
