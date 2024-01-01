@@ -49,7 +49,7 @@ void Simulation::simulate() {
 // TODO: use input handle instead of passing around this gross bools
 void Simulation::render() {
 	//Clear screen
-	SDL_SetRenderDrawColor(renderer, 50, 50, 50, 0xFF);
+	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
 	SDL_RenderClear(renderer);
 
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
@@ -58,7 +58,7 @@ void Simulation::render() {
 			if (particle->type != ParticleType::EMPTY) {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
 				RGB* rgb = context->getRGBFromArray(particle->colorIndex);
-				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b, rgb->a);
+				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
 				particle->processed = false;
 			}
 		}
@@ -125,6 +125,8 @@ bool Simulation::simulationInit() {
 
 	//Initialize renderer color
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
 
 	gameTiles = GameTiles(this->width / tileSize, this->height / tileSize);
 

@@ -14,6 +14,7 @@ class ParticleHandler
 		void handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleGas(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
 		void updateColor(Particle* particle);
 		void accelerateX(GameTiles* gameTiles, ParticleContext* context, int x,int y, int direction);
 		void accelerateY(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction);

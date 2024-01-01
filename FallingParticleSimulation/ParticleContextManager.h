@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include <string>
 #include <array>
+#include "Math.h"
 
 
 class ParticleContextManager

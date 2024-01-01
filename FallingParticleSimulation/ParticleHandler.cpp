@@ -21,8 +21,15 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 			handleLiquid(gameTiles, context, x, y);
 			break;
 		case PhysicsType::pGAS:
-			handleGas(gameTiles, context, x, y);
+			//if (fpsCount % Math::getRandomInt(2, 5) == 0) {
+			if(((float)rand() / RAND_MAX) < 0.25f){
+				handleGas(gameTiles, context, x, y);
+			}
 			break;
+	}
+
+	if (context->shouldParticleDecay()) {
+		handleDecay(gameTiles, particle, context,x ,y);
 	}
 
 
@@ -131,30 +138,30 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 }
 
 void ParticleHandler::handleGas(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
-	if (gameTiles->getTileAddress(x, y, 0, -1)->type == EMPTY) {
+	if (gameTiles->getTileAddress(x, y, 0, -1)->type == EMPTY ) {
 		accelerateY(gameTiles, context, x, y, -1);
 	}
-	//else if (gameTiles->getTileAddress(x, y, -1, 1)->type == EMPTY) {
-	//	Particle current = gameTiles->getTile(x, y, 0, 0);
-	//	Particle target = gameTiles->getTile(x, y, -1, 1);
-	//	current.processed = true;
-	//	target.processed = true;
-	//	gameTiles->setTile(x, y, -1, 1, current);
-	//	gameTiles->setTile(x, y, 0, 0, target);
-	//}
-	//else if (gameTiles->getTileAddress(x, y, 1, 1)->type == EMPTY) {
-	//	Particle current = gameTiles->getTile(x, y, 0, 0);
-	//	Particle target = gameTiles->getTile(x, y, 1, 1);
-	//	current.processed = true;
-	//	target.processed = true;
-	//	gameTiles->setTile(x, y, 1, 1, current);
-	//	gameTiles->setTile(x, y, 0, 0, target);
-	//}
-	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, 1, 0)->type == WATER)) {
+	else if (gameTiles->getTileAddress(x, y, -1, -1)->type == EMPTY) {
+		Particle current = gameTiles->getTile(x, y, 0, 0);
+		Particle target = gameTiles->getTile(x, y, -1, -1);
+		current.processed = true;
+		target.processed = true;
+		gameTiles->setTile(x, y, -1, -1, current);
+		gameTiles->setTile(x, y, 0, 0, target);
+	}
+	else if (gameTiles->getTileAddress(x, y, 1, -1)->type == EMPTY) {
+		Particle current = gameTiles->getTile(x, y, 0, 0);
+		Particle target = gameTiles->getTile(x, y, 1, -1);
+		current.processed = true;
+		target.processed = true;
+		gameTiles->setTile(x, y, 1, -1, current);
+		gameTiles->setTile(x, y, 0, 0, target);
+	}
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
 
-	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, -1, 0)->type == WATER)) {
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY) {
 		accelerateX(gameTiles, context, x, y, -1);
 	}
 	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
@@ -230,4 +237,13 @@ void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context
 	target.processed = true;
 	gameTiles->setTile(x, y, 0, openTile, current);
 	gameTiles->setTile(x, y, 0, 0, target);
+}
+
+void ParticleHandler::handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y) {
+	if (((float)rand() / RAND_MAX) < 0.03f) {
+		particle->alpha = particle->alpha - context->getDecayRate();
+		if (particle->alpha <= 0) {
+			gameTiles->setTile(x, y, 0, 0, createEmptyParticle());
+		}
+	}
 }

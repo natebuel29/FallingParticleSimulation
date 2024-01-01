@@ -25,7 +25,7 @@ Particle* GameTiles::getTileAddress(int x, int y, int xOffset, int yOffset) {
 		return &gameTiles[x + xOffset][y + yOffset];
 	}
 	else {
-		//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
+	//	Logger::getInstance()->warn("ERROR WE ARE OUT OF BOUNDS");
 		Particle oob = createOutOfBoundsParticle();
 		return &oob;
 	}
