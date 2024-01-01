@@ -176,9 +176,6 @@ void ParticleHandler::handleGas(GameTiles* gameTiles, ParticleContext* context, 
 	else if (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
-	else {
-		gameTiles->getTileAddress(x, y, 0, 0)->vel = { 0.0f,0.0f };
-	}
 }
 
 
