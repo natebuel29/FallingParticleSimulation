@@ -21,7 +21,6 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 			handleLiquid(gameTiles, context, x, y);
 			break;
 		case PhysicsType::pGAS:
-			//if (fpsCount % Math::getRandomInt(2, 5) == 0) {
 			if(((float)rand() / RAND_MAX) < 0.25f){
 				handleGas(gameTiles, context, x, y);
 			}
