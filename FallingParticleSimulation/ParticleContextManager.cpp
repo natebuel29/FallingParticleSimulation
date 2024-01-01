@@ -50,5 +50,5 @@ ParticleContextManager::ParticleContextManager() {
 	smoke = ParticleContext(PhysicsType::pGAS, smokeColors, true, {0.0f,0.0f}, {0.0f,0.0f}, true, 15, false);
 
 	std::array<RGB, 5> acidColors = { RGB{ 143,254,9}, RGB{156,254,39}, RGB{186,254,104}, RGB{115,211,0}, RGB{102,186,0} };
-	acid = ParticleContext(PhysicsType::pLIQUID, acidColors, true, { 2.0f, 2.0f }, { 0.5f, 0.2f }, false, 0, false);
+	acid = ParticleContext(PhysicsType::pLIQUID, acidColors, true, { 2.0f, 2.0f }, { 1.0f, 0.2f }, false, 0, false);
 }

@@ -96,6 +96,7 @@ void ParticleHandler::handleSolid(GameTiles* gameTiles, ParticleContext* context
 }
 
 void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+	
 	if (gameTiles->getTileAddress(x, y, 0, 1)->type == EMPTY) {
 		accelerateY(gameTiles, context, x, y, 1);
 	}
@@ -115,11 +116,11 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		gameTiles->setTile(x, y, 1, 1, current);
 		gameTiles->setTile(x, y, 0, 0, target);
 	}
-	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, 1, 0)->type == WATER)) {
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, 1, 0)->type == WATER || gameTiles->getTileAddress(x, y, 1, 0)->type == ACID)) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
 
-	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, -1, 0)->type == WATER)) {
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, -1, 0)->type == WATER || gameTiles->getTileAddress(x, y, -1, 0)->type == ACID)) {
 		accelerateX(gameTiles, context, x, y, -1);
 	}
 	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
@@ -220,7 +221,7 @@ void ParticleHandler::handleAcidDissolve(GameTiles* gameTiles, Particle* particl
 	}
 	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
 
-	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.1f) {
+	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.15f) {
 		gameTiles->setTile(x, y, 0, 1, createEmptyParticle());
 	}
 }
