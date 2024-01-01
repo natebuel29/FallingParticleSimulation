@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include <string>
 #include <array>
+#include "Math.h"
 
 
 class ParticleContextManager
@@ -22,6 +23,7 @@ private:
 	ParticleContext sand;
 	ParticleContext water;
 	ParticleContext wood;
+	ParticleContext smoke;
 	
 	ParticleContextManager();
 };

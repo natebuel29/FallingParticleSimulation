@@ -24,3 +24,11 @@ Vec2 ParticleContext::getMaxVel() {
 Vec2 ParticleContext::getDVelocity() {
 	return dVelocity;
 }
+
+uint8_t ParticleContext::getDecayRate() {
+	return decayRate;
+}
+
+bool ParticleContext::shouldParticleDecay() {
+	return shouldDecay;
+}
