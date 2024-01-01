@@ -43,6 +43,9 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 				case(SDLK_h):
 					updateCurrentParticle(func, SMOKE);
 					break;
+				case(SDLK_a):
+					updateCurrentParticle(func, ACID);
+					break;
 				case(SDLK_e):
 					updateCurrentParticle(func, EMPTY);
 					break;

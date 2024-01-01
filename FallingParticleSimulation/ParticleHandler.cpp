@@ -31,6 +31,10 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 		handleDecay(gameTiles, particle, context,x ,y);
 	}
 
+	if (particle->type == ACID) {
+		handleAcidDissolve(gameTiles, particle, context, x, y);
+	}
+
 
 	// Handle corrosive
 	// Handle flame
@@ -207,6 +211,18 @@ void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context
 	target.processed = true;
 	gameTiles->setTile(x, y, openTile, 0, current);
 	gameTiles->setTile(x, y, 0, 0, target);
+}
+
+void ParticleHandler::handleAcidDissolve(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y) {
+	Particle below = gameTiles->getTile(x, y, 0, 1);
+	if (below.type == OUTOFBOUNDS) {
+		return;
+	}
+	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
+
+	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.1f) {
+		gameTiles->setTile(x, y, 0, 1, createEmptyParticle());
+	}
 }
 
 void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction) {
