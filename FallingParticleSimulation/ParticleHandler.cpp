@@ -20,6 +20,9 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 		case PhysicsType::pLIQUID:
 			handleLiquid(gameTiles, context, x, y);
 			break;
+		case PhysicsType::pGAS:
+			handleGas(gameTiles, context, x, y);
+			break;
 	}
 
 
@@ -126,6 +129,52 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		gameTiles->getTileAddress(x, y, 0, 0)->vel = { 0.0f,0.0f };
 	}
 }
+
+void ParticleHandler::handleGas(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+	if (gameTiles->getTileAddress(x, y, 0, -1)->type == EMPTY) {
+		accelerateY(gameTiles, context, x, y, -1);
+	}
+	//else if (gameTiles->getTileAddress(x, y, -1, 1)->type == EMPTY) {
+	//	Particle current = gameTiles->getTile(x, y, 0, 0);
+	//	Particle target = gameTiles->getTile(x, y, -1, 1);
+	//	current.processed = true;
+	//	target.processed = true;
+	//	gameTiles->setTile(x, y, -1, 1, current);
+	//	gameTiles->setTile(x, y, 0, 0, target);
+	//}
+	//else if (gameTiles->getTileAddress(x, y, 1, 1)->type == EMPTY) {
+	//	Particle current = gameTiles->getTile(x, y, 0, 0);
+	//	Particle target = gameTiles->getTile(x, y, 1, 1);
+	//	current.processed = true;
+	//	target.processed = true;
+	//	gameTiles->setTile(x, y, 1, 1, current);
+	//	gameTiles->setTile(x, y, 0, 0, target);
+	//}
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x > 0.0f && (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, 1, 0)->type == WATER)) {
+		accelerateX(gameTiles, context, x, y, 1);
+	}
+
+	else if (gameTiles->getTileAddress(x, y, 0, 0)->vel.x < 0.0f && (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY || gameTiles->getTileAddress(x, y, -1, 0)->type == WATER)) {
+		accelerateX(gameTiles, context, x, y, -1);
+	}
+	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY && gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
+		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
+		if (gameTiles->getTile(x, y, direction, 0).type == EMPTY) {
+			accelerateX(gameTiles, context, x, y, direction);
+		}
+	}
+	else if (gameTiles->getTileAddress(x, y, -1, 0)->type == EMPTY) {
+		accelerateX(gameTiles, context, x, y, -1);
+
+	}
+	else if (gameTiles->getTileAddress(x, y, 1, 0)->type == EMPTY) {
+		accelerateX(gameTiles, context, x, y, 1);
+	}
+	else {
+		gameTiles->getTileAddress(x, y, 0, 0)->vel = { 0.0f,0.0f };
+	}
+}
+
 
 void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction){
 	int openTile = direction;

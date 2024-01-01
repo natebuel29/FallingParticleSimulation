@@ -32,6 +32,14 @@ Particle createWoodParticle() {
 	return wood;
 }
 
+Particle createSmokeParticle() {
+	Particle smoke = Particle();
+	smoke.type = ParticleType::SMOKE;
+	smoke.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT - 1);
+	smoke.processed = false;
+	return smoke;
+}
+
 Particle createOutOfBoundsParticle() {
 	Particle oob = Particle();
 	oob.type = ParticleType::OUTOFBOUNDS;
@@ -48,6 +56,9 @@ void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle
 			break;
 		case WOOD:
 			func = createWoodParticle;
+			break;
+		case SMOKE:
+			func = createSmokeParticle;
 			break;
 		case EMPTY:
 			func = createEmptyParticle;

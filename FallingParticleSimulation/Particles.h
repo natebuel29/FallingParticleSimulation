@@ -8,6 +8,7 @@ enum ParticleType : uint8_t {
 	OUTOFBOUNDS,
 	SAND,
 	WATER,
+	SMOKE,
 	WOOD
 };
 
@@ -25,6 +26,7 @@ Particle createEmptyParticle();
 Particle createSandParticle();
 Particle createWaterParticle();
 Particle createWoodParticle();
+Particle createSmokeParticle();
 
 //Not a big fan of this but something needs to be returned when we out of bounds
 Particle createOutOfBoundsParticle();

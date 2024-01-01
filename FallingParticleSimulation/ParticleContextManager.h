@@ -22,6 +22,7 @@ private:
 	ParticleContext sand;
 	ParticleContext water;
 	ParticleContext wood;
+	ParticleContext smoke;
 	
 	ParticleContextManager();
 };

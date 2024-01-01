@@ -160,6 +160,7 @@ void Simulation::fillCircle(int centerX, int centerY, int radius) {
 	}
 }
 
+
 void Simulation::destroy() {
 	// Will need to destroy renderer -> have a desctuctor for this?
 	SDL_DestroyWindow(window);

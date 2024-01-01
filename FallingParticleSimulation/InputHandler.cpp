@@ -40,6 +40,9 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 				case(SDLK_t):
 					updateCurrentParticle(func, WOOD);
 					break;
+				case(SDLK_h):
+					updateCurrentParticle(func, SMOKE);
+					break;
 				case(SDLK_e):
 					updateCurrentParticle(func, EMPTY);
 					break;

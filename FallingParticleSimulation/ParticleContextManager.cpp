@@ -23,6 +23,9 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 		case ParticleType::WOOD:
 			particleContext = &wood;
 			break;
+		case ParticleType::SMOKE:
+			particleContext = &smoke;
+			break;
 	}
 	if (particleContext == nullptr) {
 		Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG");
@@ -39,4 +42,7 @@ ParticleContextManager::ParticleContextManager() {
 
 	std::array<RGB, 5> woodColors = { RGB{ 85,51,17,1 }, RGB{102,68,51,1}, RGB{51,34,17,1}, RGB{153,102,51,1}, RGB{204,170,102,1} };
 	wood = ParticleContext(PhysicsType::pSOLID, woodColors, false, {0.0f, 0.0f}, { 0.0f,0.0f });
+
+	std::array<RGB, 5> smokeColors = { RGB{ 50,50,50,1 }, RGB{45,45,45,1}, RGB{55,55,55,1}, RGB{60,60,60,1}, RGB{48,48,48,1} };
+	smoke = ParticleContext(PhysicsType::pGAS, smokeColors, false, {0.0f,0.0f}, {0.0f,0.0f});
 }
