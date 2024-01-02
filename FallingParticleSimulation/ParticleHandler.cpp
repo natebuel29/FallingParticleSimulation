@@ -216,14 +216,41 @@ void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context
 
 void ParticleHandler::handleAcidDissolve(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y) {
 	Particle below = gameTiles->getTile(x, y, 0, 1);
+	Particle right = gameTiles->getTile(x, y, 1, 0);
+	Particle left = gameTiles->getTile(x, y, -1, 0);
+
 	if (below.type == OUTOFBOUNDS) {
 		return;
 	}
 	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
 
-	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.15f) {
+	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
 		gameTiles->setTile(x, y, 0, 1, createEmptyParticle());
 	}
+
+	if (right.type == OUTOFBOUNDS || right.type == EMPTY) {
+		return;
+	}
+
+	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
+
+	if (rightContext != nullptr && rightContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
+		gameTiles->setTile(x, y, 1, 0, createEmptyParticle());
+	}
+
+
+
+	if (left.type == OUTOFBOUNDS || left.type == EMPTY) {
+		return;
+	}
+
+	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
+
+	if (leftContext != nullptr && leftContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
+		gameTiles->setTile(x, y, -1, 0, createEmptyParticle());
+	}
+
+
 }
 
 void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction) {
