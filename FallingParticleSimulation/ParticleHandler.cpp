@@ -56,16 +56,14 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (lowLeft.type == EMPTY || lowRight.type == EMPTY) {
-		if (((float)rand() / RAND_MAX) > 0.5f  && lowRight.type == EMPTY) {
+		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
+		if (gameTiles->getTile(x, y, direction, 1).type == EMPTY) {
+			Particle current = gameTiles->getTile(x, y, 0, 0);
+			Particle target = gameTiles->getTile(x, y, direction, 1);
 			current.processed = true;
-			lowRight.processed = true;
-			gameTiles->setTile(x, y, 1, 1, current);
-			gameTiles->setTile(x, y, 0, 0, lowRight);
-		} else if(lowLeft.type == EMPTY){
-			current.processed = true;
-			lowLeft.processed = true;
-			gameTiles->setTile(x, y, -1, 1, current);
-			gameTiles->setTile(x, y, 0, 0, lowLeft);
+			target.processed = true;
+			gameTiles->setTile(x, y, direction, 1, current);
+			gameTiles->setTile(x, y, 0, 0, target);
 		}
 	}
 	//// TODO: THIS ISNT THE BEST WAY TO DO THIS. THIS MIGHT BREAK STUFF IN THE FUTURE!
@@ -117,20 +115,17 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(lowLeft.type);
 	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
 	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
-
 	
 	if (below.type == EMPTY) {
 		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (lowLeft.type == EMPTY) {
-		Particle current = gameTiles->getTile(x, y, 0, 0);
 		current.processed = true;
 		lowLeft.processed = true;
 		gameTiles->setTile(x, y, -1, 1, current);
 		gameTiles->setTile(x, y, 0, 0, lowLeft);
 	}
 	else if (lowRight.type == EMPTY) {
-		Particle current = gameTiles->getTile(x, y, 0, 0);
 		current.processed = true;
 		lowRight.processed = true;
 		gameTiles->setTile(x, y, 1, 1, current);
@@ -139,7 +134,6 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 	else if (current.vel.x > 0.0f && (right.type == EMPTY || right.type == WATER || right.type == ACID)) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
-
 	else if (current.vel.x < 0.0f && (left.type == EMPTY || left.type == WATER || left.type == ACID)) {
 		accelerateX(gameTiles, context, x, y, -1);
 	}
@@ -149,7 +143,6 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		}
 		else if (gameTiles->getTile(x, y, -1, 0).type == EMPTY) {
 			accelerateX(gameTiles, context, x, y, -1);
-
 		}
 	}
 	else if (left.type == EMPTY) {
