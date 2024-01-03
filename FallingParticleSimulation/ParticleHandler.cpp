@@ -42,6 +42,7 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 }
 
 void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+	Particle current = gameTiles->getTile(x, y, 0, 0);
 	Particle below = gameTiles->getTile(x, y, 0, 1);
 	Particle lowRight = gameTiles->getTile(x, y, 1, 1);
 	Particle lowLeft = gameTiles->getTile(x, y, -1, 1);
@@ -55,14 +56,16 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (lowLeft.type == EMPTY || lowRight.type == EMPTY) {
-		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
-		if (gameTiles->getTile(x, y, direction, 1).type == EMPTY) {
-			Particle current = gameTiles->getTile(x, y, 0, 0);
-			Particle target = gameTiles->getTile(x, y, direction, 1);
+		if (((float)rand() / RAND_MAX) > 0.5f  && lowRight.type == EMPTY) {
 			current.processed = true;
-			target.processed = true;
-			gameTiles->setTile(x, y, direction, 1, current);
-			gameTiles->setTile(x, y, 0, 0, target);
+			lowRight.processed = true;
+			gameTiles->setTile(x, y, 1, 1, current);
+			gameTiles->setTile(x, y, 0, 0, lowRight);
+		} else if(lowLeft.type == EMPTY){
+			current.processed = true;
+			lowLeft.processed = true;
+			gameTiles->setTile(x, y, -1, 1, current);
+			gameTiles->setTile(x, y, 0, 0, lowLeft);
 		}
 	}
 	//// TODO: THIS ISNT THE BEST WAY TO DO THIS. THIS MIGHT BREAK STUFF IN THE FUTURE!
@@ -121,19 +124,17 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 	}
 	else if (lowLeft.type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, -1, 1);
 		current.processed = true;
-		target.processed = true;
+		lowLeft.processed = true;
 		gameTiles->setTile(x, y, -1, 1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		gameTiles->setTile(x, y, 0, 0, lowLeft);
 	}
 	else if (lowRight.type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, 1, 1);
 		current.processed = true;
-		target.processed = true;
+		lowRight.processed = true;
 		gameTiles->setTile(x, y, 1, 1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		gameTiles->setTile(x, y, 0, 0, lowRight);
 	}
 	else if (current.vel.x > 0.0f && (right.type == EMPTY || right.type == WATER || right.type == ACID)) {
 		accelerateX(gameTiles, context, x, y, 1);
@@ -143,9 +144,12 @@ void ParticleHandler::handleLiquid(GameTiles* gameTiles, ParticleContext* contex
 		accelerateX(gameTiles, context, x, y, -1);
 	}
 	else if (left.type == EMPTY && right.type == EMPTY) {
-		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
-		if (gameTiles->getTile(x, y, direction, 0).type == EMPTY) {
-			accelerateX(gameTiles, context, x, y, direction);
+		if (((float)rand() / RAND_MAX) > 0.5f && gameTiles->getTile(x, y, 1, 0).type == EMPTY) {
+			accelerateX(gameTiles, context, x, y, 1);
+		}
+		else if (gameTiles->getTile(x, y, -1, 0).type == EMPTY) {
+			accelerateX(gameTiles, context, x, y, -1);
+
 		}
 	}
 	else if (left.type == EMPTY) {
@@ -179,19 +183,17 @@ void ParticleHandler::handleGas(GameTiles* gameTiles, ParticleContext* context, 
 	}
 	else if (upLeft.type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, -1, -1);
 		current.processed = true;
-		target.processed = true;
+		upLeft.processed = true;
 		gameTiles->setTile(x, y, -1, -1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		gameTiles->setTile(x, y, 0, 0, upLeft);
 	}
 	else if (upRight.type == EMPTY) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
-		Particle target = gameTiles->getTile(x, y, 1, -1);
 		current.processed = true;
-		target.processed = true;
+		upRight.processed = true;
 		gameTiles->setTile(x, y, 1, -1, current);
-		gameTiles->setTile(x, y, 0, 0, target);
+		gameTiles->setTile(x, y, 0, 0, upRight);
 	}
 	else if (current.vel.x > 0.0f && right.type == EMPTY) {
 		accelerateX(gameTiles, context, x, y, 1);
@@ -202,8 +204,11 @@ void ParticleHandler::handleGas(GameTiles* gameTiles, ParticleContext* context, 
 	}
 	else if (left.type == EMPTY &&right.type == EMPTY) {
 		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
-		if (gameTiles->getTile(x, y, direction, 0).type == EMPTY) {
-			accelerateX(gameTiles, context, x, y, direction);
+		if (((float)rand() / RAND_MAX) > 0.5f && gameTiles->getTile(x, y, 1, 0).type == EMPTY) {
+			accelerateX(gameTiles, context, x, y, 1);
+		}
+		else if (gameTiles->getTile(x, y, -1, 0).type == EMPTY) {
+			accelerateX(gameTiles, context, x, y, -1);
 		}
 	}
 	else if (left.type == EMPTY) {
