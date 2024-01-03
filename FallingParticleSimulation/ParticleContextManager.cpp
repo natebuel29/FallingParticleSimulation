@@ -31,7 +31,7 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 			break;
 	}
 	if (particleContext == nullptr) {
-		Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG");
+	//	Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG");
 	}
 	return particleContext;
 }
