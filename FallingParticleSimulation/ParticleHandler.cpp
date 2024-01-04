@@ -47,12 +47,13 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 	Particle lowRight = gameTiles->getTile(x, y, 1, 1);
 	Particle lowLeft = gameTiles->getTile(x, y, -1, 1);
 
+	ParticleContext* currentContext = ParticleContextManager::getInstance()->getParticleContext(current.type);
 	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
 	ParticleContext* lowRightContext = ParticleContextManager::getInstance()->getParticleContext(lowRight.type);
 	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(lowLeft.type);
 
 
-	if (below.type == EMPTY || (belowContext != nullptr && belowContext->getPhysics() == pLIQUID)) {
+	if (currentContext->isParticleSwappable(below.type)) {
 		accelerateY(gameTiles, context, x, y, 1);
 	}
 	else if (lowLeft.type == EMPTY || lowRight.type == EMPTY) {
