@@ -4,7 +4,6 @@
 #include "Colors.h"
 #include "Math.h"
 #include <array>
-#include <set>
 
 //Think of this as scriptable objects
 class ParticleContext
@@ -12,7 +11,7 @@ class ParticleContext
 	public:
 		//this shouldn't be used but idk how to make it so we don't need
 		ParticleContext() {}
-		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor, Vec2 maxVelocity, Vec2 velocity, bool shoDecay, uint8_t parDecayRate, bool dissolvable, std::set<ParticleType> swapParticles) : physics(phy), colors(colorArray), updateColor(updateColor), dVelocity(velocity), maxVel(maxVelocity),shouldDecay(shoDecay), decayRate(parDecayRate), isDissolvable(dissolvable),swappableParticles(swapParticles) {}
+		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor, Vec2 maxVelocity, Vec2 velocity, bool shoDecay, uint8_t parDecayRate, bool dissolvable) : physics(phy), colors(colorArray), updateColor(updateColor), dVelocity(velocity), maxVel(maxVelocity),shouldDecay(shoDecay), decayRate(parDecayRate), isDissolvable(dissolvable) {}
 		PhysicsType getPhysics();
 		RGB* getRGBFromArray(int index);
 		Vec2 getMaxVel();
@@ -22,12 +21,10 @@ class ParticleContext
 		bool shouldUpdateColor();
 		bool shouldParticleDecay();
 		bool shouldParticleDissolve();
-		bool isParticleSwappable(ParticleType particle);
 
 	private:
 		PhysicsType physics;
 		std::array<RGB, 5> colors;
-		std::set<ParticleType> swappableParticles;
 		Vec2 maxVel;
 		Vec2 dVelocity;
 		uint8_t decayRate;

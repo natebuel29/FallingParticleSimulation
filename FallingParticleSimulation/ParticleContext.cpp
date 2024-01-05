@@ -35,14 +35,3 @@ bool ParticleContext::shouldParticleDecay() {
 bool ParticleContext::shouldParticleDissolve() {
 	return isDissolvable;
 }
-
-bool ParticleContext::isParticleSwappable(ParticleType particle) {
-	auto it = swappableParticles.find(particle);
-
-	if (it == swappableParticles.end()) {
-		return false;
-	}
-	else {
-		return true;
-	}
-}
