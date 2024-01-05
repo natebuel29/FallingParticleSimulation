@@ -41,7 +41,7 @@ ParticleContextManager::ParticleContextManager() {
 	sand = ParticleContext(PhysicsType::pSAND, sandColors, false, {0.0f, 3.0f}, { 0.0f,0.25f }, false, 0, false);
 
 	std::array<RGB, 5> waterColors = { RGB{ 15,94,156}, RGB{20,85,156}, RGB{14,95,162}, RGB{28,100,152}, RGB{12,88,162} };
-	water = ParticleContext(PhysicsType::pLIQUID, waterColors,true,{4.0f, 2.0f}, {1.0f, 0.2f}, false, 0, false);
+	water = ParticleContext(PhysicsType::pLIQUID, waterColors,true,{4.0f, 2.0f}, {4.0f, 0.2f}, false, 0, false);
 
 	std::array<RGB, 5> woodColors = { RGB{ 85,51,17 }, RGB{102,68,51}, RGB{51,34,17}, RGB{153,102,51}, RGB{204,170,102} };
 	wood = ParticleContext(PhysicsType::pSOLID, woodColors, false, {0.0f, 0.0f}, { 0.0f,0.0f }, false, 0, true);
