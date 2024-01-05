@@ -44,6 +44,15 @@ Particle createSmokeParticle() {
 	return smoke;
 }
 
+Particle createAcidParticle() {
+	Particle acid = Particle();
+	acid.type = ParticleType::ACID;
+	acid.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT - 1);
+	acid.processed = false;
+	acid.alpha = 255;
+	return acid;
+}
+
 Particle createOutOfBoundsParticle() {
 	Particle oob = Particle();
 	oob.type = ParticleType::OUTOFBOUNDS;
@@ -63,6 +72,9 @@ void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle
 			break;
 		case SMOKE:
 			func = createSmokeParticle;
+			break;
+		case ACID:
+			func = createAcidParticle;
 			break;
 		case EMPTY:
 			func = createEmptyParticle;

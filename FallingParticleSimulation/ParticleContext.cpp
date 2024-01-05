@@ -32,3 +32,6 @@ uint8_t ParticleContext::getDecayRate() {
 bool ParticleContext::shouldParticleDecay() {
 	return shouldDecay;
 }
+bool ParticleContext::shouldParticleDissolve() {
+	return isDissolvable;
+}
