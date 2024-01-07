@@ -11,9 +11,11 @@ class ParticleHandler
 		void handleParticle(GameTiles* gameTiles, int x, int y, int fpsCount);
 	private:
 		void handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleWater(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleAcid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleLiquid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
-		void handleGas(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleSmoke(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
 		void updateColor(Particle* particle);
 		void handleAcidDissolve(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
