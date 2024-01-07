@@ -23,12 +23,11 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 		handleAcid(gameTiles, context, x, y);
 		break;
 	case SMOKE:
-		handleSmoke(gameTiles, context, x, y);
-		break;
-	}
-
-	if (context->shouldParticleDecay()) {
+		if (((float)rand() / RAND_MAX) < 0.25f) {
+			handleSmoke(gameTiles, context, x, y);
+		}
 		handleDecay(gameTiles, particle, context, x, y);
+		break;
 	}
 
 	// Handle corrosive
@@ -105,12 +104,6 @@ void ParticleHandler::handleWater(GameTiles* gameTiles, ParticleContext* context
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
 
-	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
-	ParticleContext* lowRightContext = ParticleContextManager::getInstance()->getParticleContext(lowRight.type);
-	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(lowLeft.type);
-	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
-	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
-
 	if (below.type == EMPTY) {
 		accelerateY(gameTiles, context, x, y, 1);
 	}
@@ -160,12 +153,6 @@ void ParticleHandler::handleAcid(GameTiles* gameTiles, ParticleContext* context,
 	Particle lowLeft = gameTiles->getTile(x, y, -1, 1);
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
-
-	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
-	ParticleContext* lowRightContext = ParticleContextManager::getInstance()->getParticleContext(lowRight.type);
-	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(lowLeft.type);
-	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
-	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
 
 	if (below.type == EMPTY || below.type == WATER) {
 		accelerateY(gameTiles, context, x, y, 1);
@@ -219,12 +206,6 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
 
-	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(up.type);
-	ParticleContext* lowRightContext = ParticleContextManager::getInstance()->getParticleContext(upRight.type);
-	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(upLeft.type);
-	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
-	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
-
 	if (up.type == EMPTY) {
 		accelerateY(gameTiles, context, x, y, -1);
 	}
@@ -251,10 +232,10 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 	}
 	else if (left.type == EMPTY && right.type == EMPTY) {
 		int direction = ((float)rand() / RAND_MAX) > 0.5f ? 1 : -1;
-		if (((float)rand() / RAND_MAX) > 0.5f && gameTiles->getTile(x, y, 1, 0).type == EMPTY) {
+		if (((float)rand() / RAND_MAX) > 0.5f && right.type == EMPTY) {
 			accelerateX(gameTiles, context, x, y, 1);
 		}
-		else if (gameTiles->getTile(x, y, -1, 0).type == EMPTY) {
+		else if (left.type == EMPTY) {
 			accelerateX(gameTiles, context, x, y, -1);
 		}
 	}
@@ -302,10 +283,10 @@ void ParticleHandler::handleAcidDissolve(GameTiles* gameTiles, Particle* particl
 	Particle below = gameTiles->getTile(x, y, 0, 1);
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
+
 	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
 	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
 	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
-
 
 
 	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
