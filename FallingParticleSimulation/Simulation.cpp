@@ -85,25 +85,29 @@ void Simulation::render() {
 	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
 
 	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+	SDL_Rect background;
+	background.x =0;
+	background.y = 0;
+	background.w = width;
+	background.h = height;
+	SDL_FillRect(surface, &background, SDL_MapRGB(surface->format, 100, 100, 100));
+
 	SDL_RenderClear(renderer);
-	SDL_Rect destr;
 	SDL_Texture* tex = NULL;
-	destr.x = width;
-	destr.y = height;
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			Particle* particle = gameTiles.getTileAddress(i, j, 0, 0);
 			if (particle->type != ParticleType::EMPTY) {
-				//ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
-				//RGB* rgb = context->getRGBFromArray(particle->colorIndex);
+				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
+				RGB* rgb = context->getRGBFromArray(particle->colorIndex);
 				//Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
-				//particle->processed = false;
+				particle->processed = false;
 				SDL_Rect rect;
-				rect.x = i*5;
-				rect.y = j*5;
-				rect.w = 5;
+				rect.x = i* tileSize;
+				rect.y = j* tileSize;
+				rect.w = tileSize;
 				rect.h = 5;
-				SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 255, 0, 0));
+				SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, rgb->r, rgb->g, rgb->b));
 			}
 		}
 	}
