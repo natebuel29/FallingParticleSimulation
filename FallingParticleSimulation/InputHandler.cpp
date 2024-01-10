@@ -1,4 +1,6 @@
 #include "InputHandler.h"
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
 
 InputHandler::InputHandler() {
 	inputHandlerInit();
@@ -25,7 +27,9 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 
 	//TODO: I hate this and would like to refactor in future
 	while (SDL_PollEvent(&e) != 0) {
-		// user requests to quit
+		// user requests to quit4
+		ImGui_ImplSDL2_ProcessEvent(&e);
+
 		if (e.type == SDL_QUIT) {
 			shouldQuit = true;
 		}

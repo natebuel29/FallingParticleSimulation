@@ -3,6 +3,10 @@
 Particle createEmptyParticle() {
 	Particle empty = Particle();
 	empty.type = ParticleType::EMPTY;
+	empty.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT - 1);
+	empty.vel = { 0.0f,0.0f };
+	empty.processed = false;
+	empty.alpha = 255;
 	return empty;
 }
 

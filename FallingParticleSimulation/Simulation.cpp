@@ -8,7 +8,6 @@ Simulation::Simulation(int w, int h):width(w), height(h) {
 	this->height = h;
 	simulationInit();
 }
-
 Simulation::~Simulation() {
 	destroy();
 }
@@ -29,14 +28,15 @@ void Simulation::simulate() {
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
 	ImGui_ImplSDLRenderer2_Init(renderer);
 
+	bool show_another_window = true;
 
 	bool quit = false;
 
 	int lastTime = SDL_GetTicks();
 	int currentTime;
+	bool showDemoWindow = true;
 
 	while (!quit) {
-		inputHandler.pollEvents(createParticle, quit, radius);
 		currentTime = SDL_GetTicks();
 
 		//  // Start the Dear ImGui frame
@@ -53,14 +53,18 @@ void Simulation::simulate() {
 		}
 		step();
 		// draw to screen
+		//https://stackoverflow.com/questions/72645989/rectangle-to-texture-in-sdl2-c - draw to surface -> texture? will this resolve
+// 3. Show another simple window.
+		if (show_another_window)
+		{
+			ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text("Hello from another window!");
+			if (ImGui::Button("Close Me"))
+				show_another_window = false;
+			ImGui::End();
+		}
+		inputHandler.pollEvents(createParticle, quit, radius);
 
-
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a 
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-		ImGui::End();
-		//
 		// Rendering
 		render();
 
@@ -79,21 +83,45 @@ void Simulation::simulate() {
 void Simulation::render() {
 	//Clear screen
 	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
+
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
+	SDL_Rect destr;
+	SDL_Texture* tex = NULL;
+	destr.x = width;
+	destr.y = height;
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			Particle* particle = gameTiles.getTileAddress(i, j, 0, 0);
 			if (particle->type != ParticleType::EMPTY) {
-				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
-				RGB* rgb = context->getRGBFromArray(particle->colorIndex);
-				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
-				particle->processed = false;
+				//ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
+				//RGB* rgb = context->getRGBFromArray(particle->colorIndex);
+				//Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
+				//particle->processed = false;
+				SDL_Rect rect;
+				rect.x = i*5;
+				rect.y = j*5;
+				rect.w = 5;
+				rect.h = 5;
+				SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 255, 0, 0));
 			}
 		}
 	}
+
+	tex  = SDL_CreateTextureFromSurface(renderer, surface);
+	//check if texture was created
+	if (tex == NULL) {
+		std::cout << SDL_GetError() << std::endl;
+		exit(-1);
+	}
+	SDL_FreeSurface(surface);
+
+	SDL_RenderCopy(renderer, tex, NULL,NULL);
+
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 	SDL_RenderPresent(renderer);
+	SDL_DestroyTexture(tex);
 }
 
 // TODO: use input handle instead of passing around this gross bools
