@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <array>
 #include <iostream>
 #include "Logger.h"
 #include "Particles.h"
