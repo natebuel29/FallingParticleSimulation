@@ -194,7 +194,7 @@ void ParticleHandler::handleAcid(GameTiles* gameTiles, ParticleContext* context,
 		gameTiles->getTileAddress(x, y, 0, 0)->vel = { 0.0f,0.0f };
 	}
 	
-	handleDecay(gameTiles, &current, context, x, y);
+	handleAcidDissolve(gameTiles, &current, context, x, y);
 }
 
 

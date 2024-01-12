@@ -11,7 +11,13 @@ bool InputHandler::isKeyPressed(int key) {
 }
 
 bool InputHandler::isMouseButtonPressed(int button) {
-	return (SDL_GetMouseState(NULL, NULL) && SDL_BUTTON(button));
+	ImGuiIO& io = ImGui::GetIO();
+	if (!io.WantCaptureMouse) {
+		return (SDL_GetMouseState(NULL, NULL) && SDL_BUTTON(button));
+	}
+	else {
+		return false;
+	}
 }
 
 void InputHandler::getMousePosition(int* x, int* y) {
@@ -27,32 +33,13 @@ void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, 
 
 	//TODO: I hate this and would like to refactor in future
 	while (SDL_PollEvent(&e) != 0) {
-		// user requests to quit4
-		ImGui_ImplSDL2_ProcessEvent(&e);
-
+		// user requests to quit
+		bool test = ImGui_ImplSDL2_ProcessEvent(&e);
 		if (e.type == SDL_QUIT) {
 			shouldQuit = true;
 		}
 		else if (e.type == SDL_KEYDOWN) {
 			switch (e.key.keysym.sym) {
-				case(SDLK_s):
-					updateCurrentParticle(func, SAND);
-					break;
-				case(SDLK_w):
-					updateCurrentParticle(func, WATER);
-					break;
-				case(SDLK_t):
-					updateCurrentParticle(func, WOOD);
-					break;
-				case(SDLK_h):
-					updateCurrentParticle(func, SMOKE);
-					break;
-				case(SDLK_a):
-					updateCurrentParticle(func, ACID);
-					break;
-				case(SDLK_e):
-					updateCurrentParticle(func, EMPTY);
-					break;
 				case(SDLK_1):
 					radius = 1;
 					break;

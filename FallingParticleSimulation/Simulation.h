@@ -34,6 +34,8 @@ class Simulation
 		const int tileSize = 4;
 
 		int radius = 10;
+
+		bool simRunning = true;
 		
 		GameTiles gameTiles;
 

@@ -21,8 +21,7 @@ void Simulation::simulate() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	// Setup Dear ImGui style
-	//	ImGui::StyleColorsDark();
-	ImGui::StyleColorsLight();
+	ImGui::StyleColorsDark();
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -35,6 +34,7 @@ void Simulation::simulate() {
 	int lastTime = SDL_GetTicks();
 	int currentTime;
 	bool showDemoWindow = true;
+	int last_item = 0;
 
 	while (!quit) {
 		currentTime = SDL_GetTicks();
@@ -51,20 +51,30 @@ void Simulation::simulate() {
 			fpsCount = 0;
 
 		}
-		step();
-		// draw to screen
-		//https://stackoverflow.com/questions/72645989/rectangle-to-texture-in-sdl2-c - draw to surface -> texture? will this resolve
-// 3. Show another simple window.
+		inputHandler.pollEvents(createParticle, quit, radius);
+		ImGui::ShowDemoWindow(&showDemoWindow);
+
 		if (show_another_window)
 		{
-			ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Begin("Controls", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				show_another_window = false;
+			ImGui::Checkbox("SIM RUNNING", &simRunning);
+
+			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID" };
+			static int item_current = 2;
+			ImGui::Combo("PARTICLES", &item_current, items, IM_ARRAYSIZE(items));
+			if (item_current != last_item) {
+				updateCurrentParticle(createParticle, static_cast<ParticleType>(item_current));
+				last_item = item_current;
+			}
+
 			ImGui::End();
 		}
-		inputHandler.pollEvents(createParticle, quit, radius);
-
+		if (simRunning) {
+			step();
+		}
 		// Rendering
 		render();
 
@@ -84,13 +94,10 @@ void Simulation::render() {
 	//Clear screen
 	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
 
-	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
-	SDL_Rect background;
-	background.x =0;
-	background.y = 0;
-	background.w = width;
-	background.h = height;
-	SDL_FillRect(surface, &background, SDL_MapRGB(surface->format, 100, 100, 100));
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
+	SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
+
+	Draw::drawRect(surface, 0, 0, width, height, 100, 100, 100, 255);
 
 	SDL_RenderClear(renderer);
 	SDL_Texture* tex = NULL;
@@ -100,14 +107,8 @@ void Simulation::render() {
 			if (particle->type != ParticleType::EMPTY) {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
 				RGB* rgb = context->getRGBFromArray(particle->colorIndex);
-				//Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
+				Draw::drawRect(surface, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
 				particle->processed = false;
-				SDL_Rect rect;
-				rect.x = i* tileSize;
-				rect.y = j* tileSize;
-				rect.w = tileSize;
-				rect.h = 5;
-				SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, rgb->r, rgb->g, rgb->b));
 			}
 		}
 	}

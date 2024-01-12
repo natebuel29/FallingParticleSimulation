@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Particles.h"
+
 class InputHandler
 {
 	public:
