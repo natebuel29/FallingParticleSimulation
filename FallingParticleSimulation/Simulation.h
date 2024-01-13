@@ -31,9 +31,11 @@ class Simulation
 	private:
 		int width, height;
 	
-		const int tileSize = 5;
+		const int tileSize = 4;
 
 		int radius = 10;
+
+		bool simRunning = true;
 		
 		GameTiles gameTiles;
 

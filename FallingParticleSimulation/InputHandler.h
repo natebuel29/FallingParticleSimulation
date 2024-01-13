@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Particles.h"
+
 class InputHandler
 {
 	public:
@@ -13,7 +14,7 @@ class InputHandler
 		void getMousePosition(int* x, int* y);
 
 		// not a fan of this and would like to refactor in future
-		void pollEvents(ParticleCreationFunction& func, bool& shouldQuit, int& radius);		
+		void pollEvents(bool& shouldQuit, bool& showGUI);		
 	private:
 		void inputHandlerInit();
 		const Uint8* keyStates = nullptr;

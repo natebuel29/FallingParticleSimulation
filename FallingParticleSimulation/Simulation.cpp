@@ -1,26 +1,46 @@
 #include "Simulation.h"
-
+#include "imgui.h"
+#include "imgui_impl_sdlrenderer2.h"
+#include "imgui_impl_sdl2.h"
 // PUBLIC
 Simulation::Simulation(int w, int h):width(w), height(h) {
 	this->width = w;
 	this->height = h;
 	simulationInit();
 }
-
 Simulation::~Simulation() {
 	destroy();
 }
 
 void Simulation::simulate() {
 
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+	ImGui_ImplSDLRenderer2_Init(renderer);
+
+	bool showGUI = true;
 	bool quit = false;
 
 	int lastTime = SDL_GetTicks();
 	int currentTime;
+	int last_item = 0;
 
 	while (!quit) {
-		inputHandler.pollEvents(createParticle, quit, radius);
 		currentTime = SDL_GetTicks();
+
+		//  // Start the Dear ImGui frame
+		ImGui_ImplSDLRenderer2_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
 
 		if (currentTime - lastTime >= 1000) {
 			lastTime = currentTime;
@@ -29,8 +49,33 @@ void Simulation::simulate() {
 			fpsCount = 0;
 
 		}
-		step();
-		// draw to screen
+		inputHandler.pollEvents(quit, showGUI);
+
+		//IMGUI logic
+		if (showGUI)
+		{
+			ImGui::Begin("Controls", &showGUI);
+			ImGui::Checkbox("SIM RUNNING", &simRunning);
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID" };
+			static int item_current = 2;
+			ImGui::Combo("PARTICLES", &item_current, items, IM_ARRAYSIZE(items));
+			if (item_current != last_item) {
+				updateCurrentParticle(createParticle,static_cast<ParticleType>(item_current));
+				last_item = item_current;
+			}
+			static ImGuiSliderFlags flags = ImGuiSliderFlags_None;
+			static int slider_i = 10;
+			ImGui::SliderInt("Brush Size", &slider_i, 1, 50, "%d", flags);
+			radius = slider_i;
+			ImGui::End();
+		}
+
+		if (simRunning) {
+			step();
+		}
+		// Rendering
 		render();
 
 		fpsCount++;
@@ -39,8 +84,6 @@ void Simulation::simulate() {
 		if (frameTime < SCREEN_TICKS_PER_FRAME) {
 			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTime);
 		}
-
-	//	resetParticles();
 
 	}
 
@@ -51,23 +94,33 @@ void Simulation::render() {
 	//Clear screen
 	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
 	SDL_RenderClear(renderer);
-
+	// Create surface to draw simulation on
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
+	// Draw background on surface
+	Draw::drawRect(surface, 0, 0, width, height, 100, 100, 100, 255);
+	SDL_Texture* tex = NULL;
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
 			Particle* particle = gameTiles.getTileAddress(i, j, 0, 0);
 			if (particle->type != ParticleType::EMPTY) {
 				ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
 				RGB* rgb = context->getRGBFromArray(particle->colorIndex);
-				Draw::drawRect(renderer, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
+				Draw::drawRect(surface, i * tileSize, j * tileSize, tileSize, tileSize, rgb->r, rgb->g, rgb->b,particle->alpha);
 				particle->processed = false;
 			}
 		}
 	}
 
+	tex  = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_RenderCopy(renderer, tex, NULL,NULL);
+	ImGui::Render();
+	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 	SDL_RenderPresent(renderer);
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(tex);
 }
 
-// TODO: use input handle instead of passing around this gross bools
+
 void Simulation::step() {
 	bool isEvenFrame = fpsCount % 2 == 0;
 	for (int j = 0; j < gameTiles.getColumnCount(); j++) {
@@ -164,6 +217,13 @@ void Simulation::fillCircle(int centerX, int centerY, int radius) {
 
 
 void Simulation::destroy() {
+
+
+	// Cleanup
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	// Will need to destroy renderer -> have a desctuctor for this?
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);

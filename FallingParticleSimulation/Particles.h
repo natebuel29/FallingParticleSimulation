@@ -10,7 +10,7 @@ enum ParticleType : uint8_t {
 	WATER,
 	SMOKE,
 	WOOD,
-	ACID
+	ACID,
 };
 
 struct Particle {
