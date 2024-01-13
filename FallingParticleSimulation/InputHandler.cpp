@@ -28,7 +28,7 @@ void InputHandler::inputHandlerInit() {
 	keyStates = SDL_GetKeyboardState(NULL);
 }
 
-void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, bool& showGUI) {
+void InputHandler::pollEvents(bool& shouldQuit, bool& showGUI) {
 	SDL_Event e;
 
 	//TODO: I hate this and would like to refactor in future

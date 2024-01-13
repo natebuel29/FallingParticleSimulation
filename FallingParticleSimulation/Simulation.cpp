@@ -28,7 +28,6 @@ void Simulation::simulate() {
 	ImGui_ImplSDLRenderer2_Init(renderer);
 
 	bool showGUI = true;
-
 	bool quit = false;
 
 	int lastTime = SDL_GetTicks();
@@ -50,8 +49,9 @@ void Simulation::simulate() {
 			fpsCount = 0;
 
 		}
-		inputHandler.pollEvents(createParticle, quit, showGUI);
+		inputHandler.pollEvents(quit, showGUI);
 
+		//IMGUI logic
 		if (showGUI)
 		{
 			ImGui::Begin("Controls", &showGUI);
@@ -62,7 +62,7 @@ void Simulation::simulate() {
 			static int item_current = 2;
 			ImGui::Combo("PARTICLES", &item_current, items, IM_ARRAYSIZE(items));
 			if (item_current != last_item) {
-				updateCurrentParticle(createParticle, static_cast<ParticleType>(item_current));
+				updateCurrentParticle(createParticle,static_cast<ParticleType>(item_current));
 				last_item = item_current;
 			}
 			static ImGuiSliderFlags flags = ImGuiSliderFlags_None;
