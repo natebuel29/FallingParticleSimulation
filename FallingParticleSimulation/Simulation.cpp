@@ -27,13 +27,12 @@ void Simulation::simulate() {
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
 	ImGui_ImplSDLRenderer2_Init(renderer);
 
-	bool show_another_window = true;
+	bool showGUI = true;
 
 	bool quit = false;
 
 	int lastTime = SDL_GetTicks();
 	int currentTime;
-	bool showDemoWindow = true;
 	int last_item = 0;
 
 	while (!quit) {
@@ -51,16 +50,13 @@ void Simulation::simulate() {
 			fpsCount = 0;
 
 		}
-		inputHandler.pollEvents(createParticle, quit, radius);
-		ImGui::ShowDemoWindow(&showDemoWindow);
+		inputHandler.pollEvents(createParticle, quit, showGUI);
 
-		if (show_another_window)
+		if (showGUI)
 		{
-			ImGui::Begin("Controls", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me"))
-				show_another_window = false;
+			ImGui::Begin("Controls", &showGUI);
 			ImGui::Checkbox("SIM RUNNING", &simRunning);
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID" };
 			static int item_current = 2;
@@ -69,9 +65,13 @@ void Simulation::simulate() {
 				updateCurrentParticle(createParticle, static_cast<ParticleType>(item_current));
 				last_item = item_current;
 			}
-
+			static ImGuiSliderFlags flags = ImGuiSliderFlags_None;
+			static int slider_i = 10;
+			ImGui::SliderInt("Brush Size", &slider_i, 1, 50, "%d", flags);
+			radius = slider_i;
 			ImGui::End();
 		}
+
 		if (simRunning) {
 			step();
 		}

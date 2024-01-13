@@ -28,29 +28,20 @@ void InputHandler::inputHandlerInit() {
 	keyStates = SDL_GetKeyboardState(NULL);
 }
 
-void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, int& radius) {
+void InputHandler::pollEvents(ParticleCreationFunction& func, bool& shouldQuit, bool& showGUI) {
 	SDL_Event e;
 
 	//TODO: I hate this and would like to refactor in future
 	while (SDL_PollEvent(&e) != 0) {
 		// user requests to quit
-		bool test = ImGui_ImplSDL2_ProcessEvent(&e);
+		ImGui_ImplSDL2_ProcessEvent(&e);
 		if (e.type == SDL_QUIT) {
 			shouldQuit = true;
 		}
 		else if (e.type == SDL_KEYDOWN) {
 			switch (e.key.keysym.sym) {
-				case(SDLK_1):
-					radius = 1;
-					break;
-				case(SDLK_2):
-					radius = 10;
-					break;
-				case(SDLK_3):
-					radius = 20;
-					break;
-				case(SDLK_4):
-					radius = 40;
+				case(SDLK_d):
+					showGUI = !showGUI;
 					break;
 				case(SDLK_ESCAPE):
 					shouldQuit = isKeyPressed(SDL_SCANCODE_ESCAPE);
