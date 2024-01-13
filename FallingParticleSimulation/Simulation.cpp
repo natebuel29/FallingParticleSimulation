@@ -93,13 +93,11 @@ void Simulation::simulate() {
 void Simulation::render() {
 	//Clear screen
 	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 0xFF);
-
-	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
-	SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
-
-	Draw::drawRect(surface, 0, 0, width, height, 100, 100, 100, 255);
-
 	SDL_RenderClear(renderer);
+	// Create surface to draw simulation on
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
+	// Draw background on surface
+	Draw::drawRect(surface, 0, 0, width, height, 100, 100, 100, 255);
 	SDL_Texture* tex = NULL;
 	for (int i = 0; i < gameTiles.getRowCount(); i++) {
 		for (int j = 0; j < gameTiles.getColumnCount(); j++) {
@@ -114,22 +112,15 @@ void Simulation::render() {
 	}
 
 	tex  = SDL_CreateTextureFromSurface(renderer, surface);
-	//check if texture was created
-	if (tex == NULL) {
-		std::cout << SDL_GetError() << std::endl;
-		exit(-1);
-	}
-	SDL_FreeSurface(surface);
-
 	SDL_RenderCopy(renderer, tex, NULL,NULL);
-
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 	SDL_RenderPresent(renderer);
+	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(tex);
 }
 
-// TODO: use input handle instead of passing around this gross bools
+
 void Simulation::step() {
 	bool isEvenFrame = fpsCount % 2 == 0;
 	for (int j = 0; j < gameTiles.getColumnCount(); j++) {
