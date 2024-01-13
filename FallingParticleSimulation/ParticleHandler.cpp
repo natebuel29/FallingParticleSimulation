@@ -1,11 +1,12 @@
 #include "ParticleHandler.h"
 
 ParticleHandler::ParticleHandler() {
+	contextManager = ParticleContextManager::getInstance();
 }
 
 void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fpsCount) {
 	Particle* particle = gameTiles->getTileAddress(x, y, 0, 0);
-	ParticleContext* context = ParticleContextManager::getInstance()->getParticleContext(particle->type);
+	ParticleContext* context = contextManager->getParticleContext(particle->type);
 
 	////Handle color update
 	if (context->shouldUpdateColor()) {
@@ -41,9 +42,9 @@ void ParticleHandler::handleSand(GameTiles* gameTiles, ParticleContext* context,
 	Particle lowRight = gameTiles->getTile(x, y, 1, 1);
 	Particle lowLeft = gameTiles->getTile(x, y, -1, 1);
 
-	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
-	ParticleContext* lowRightContext = ParticleContextManager::getInstance()->getParticleContext(lowRight.type);
-	ParticleContext* lowLeftContext = ParticleContextManager::getInstance()->getParticleContext(lowLeft.type);
+	ParticleContext* belowContext = contextManager->getParticleContext(below.type);
+	ParticleContext* lowRightContext = contextManager->getParticleContext(lowRight.type);
+	ParticleContext* lowLeftContext =contextManager->getParticleContext(lowLeft.type);
 
 
 	if (below.type == EMPTY || (belowContext != nullptr && belowContext->getPhysics() == pLIQUID)) {
@@ -284,18 +285,18 @@ void ParticleHandler::handleAcidDissolve(GameTiles* gameTiles, Particle* particl
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
 
-	ParticleContext* belowContext = ParticleContextManager::getInstance()->getParticleContext(below.type);
-	ParticleContext* rightContext = ParticleContextManager::getInstance()->getParticleContext(right.type);
-	ParticleContext* leftContext = ParticleContextManager::getInstance()->getParticleContext(left.type);
+	ParticleContext* belowContext = contextManager->getParticleContext(below.type);
+	ParticleContext* rightContext = contextManager->getParticleContext(right.type);
+	ParticleContext* leftContext = contextManager->getParticleContext(left.type);
 
 
-	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
+	if (belowContext != nullptr && belowContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < belowContext->getDecayRate()) {
 		gameTiles->setTile(x, y, 0, 1, createEmptyParticle());
 	}
-	else if (rightContext != nullptr && rightContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
+	else if (rightContext != nullptr && rightContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < rightContext->getDecayRate()) {
 		gameTiles->setTile(x, y, 1, 0, createEmptyParticle());
 	}
-	else if (leftContext != nullptr && leftContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < 0.65f) {
+	else if (leftContext != nullptr && leftContext->shouldParticleDissolve() && ((float)rand() / RAND_MAX) < leftContext->getDecayRate()) {
 		gameTiles->setTile(x, y, -1, 0, createEmptyParticle());
 	}
 

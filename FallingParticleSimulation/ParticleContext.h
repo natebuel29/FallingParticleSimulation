@@ -11,12 +11,12 @@ class ParticleContext
 	public:
 		//this shouldn't be used but idk how to make it so we don't need
 		ParticleContext() {}
-		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor, Vec2 maxVelocity, Vec2 velocity, bool shoDecay, uint8_t parDecayRate, bool dissolvable) : physics(phy), colors(colorArray), updateColor(updateColor), dVelocity(velocity), maxVel(maxVelocity),shouldDecay(shoDecay), decayRate(parDecayRate), isDissolvable(dissolvable) {}
+		ParticleContext(PhysicsType phy, std::array<RGB, 5> colorArray, bool updateColor, Vec2 maxVelocity, Vec2 velocity, bool shoDecay, float parDecayRate, bool dissolvable) : physics(phy), colors(colorArray), updateColor(updateColor), dVelocity(velocity), maxVel(maxVelocity),shouldDecay(shoDecay), decayRate(parDecayRate), isDissolvable(dissolvable) {}
 		PhysicsType getPhysics();
 		RGB* getRGBFromArray(int index);
 		Vec2 getMaxVel();
 		Vec2 getDVelocity();
-		uint8_t getDecayRate();
+		float getDecayRate();
 
 		bool shouldUpdateColor();
 		bool shouldParticleDecay();
@@ -27,7 +27,7 @@ class ParticleContext
 		std::array<RGB, 5> colors;
 		Vec2 maxVel;
 		Vec2 dVelocity;
-		uint8_t decayRate;
+		float decayRate;
 		bool updateColor;
 		bool shouldDecay;
 		bool isDissolvable;

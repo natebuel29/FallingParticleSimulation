@@ -25,7 +25,7 @@ Vec2 ParticleContext::getDVelocity() {
 	return dVelocity;
 }
 
-uint8_t ParticleContext::getDecayRate() {
+float ParticleContext::getDecayRate() {
 	return decayRate;
 }
 

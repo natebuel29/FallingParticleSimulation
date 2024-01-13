@@ -10,6 +10,7 @@ class ParticleHandler
 		ParticleHandler();
 		void handleParticle(GameTiles* gameTiles, int x, int y, int fpsCount);
 	private:
+		ParticleContextManager* contextManager;
 		void handleSand(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleWater(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleAcid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
@@ -20,4 +21,5 @@ class ParticleHandler
 		void handleAcidDissolve(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
 		void accelerateX(GameTiles* gameTiles, ParticleContext* context, int x,int y, int direction);
 		void accelerateY(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction);
+
 };
