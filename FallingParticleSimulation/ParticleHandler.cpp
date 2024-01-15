@@ -23,6 +23,9 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 	case ACID:
 		handleAcid(gameTiles, context, x, y);
 		break;
+	case FIRE:
+		handleFire(gameTiles, context, x, y);
+		break;
 	case SMOKE:
 		if (((float)rand() / RAND_MAX) < 0.25f) {
 			handleSmoke(gameTiles, context, x, y);
@@ -249,6 +252,12 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 	}
 }
 
+void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context, int x, int y){
+	Particle* current = gameTiles->getTileAddress(x, y, 0, 0);
+
+	handleDecay(gameTiles, current, context, x, y);
+}
+
 
 void ParticleHandler::accelerateX(GameTiles* gameTiles, ParticleContext* context, int x, int y, int direction) {
 	int openTile = direction;
@@ -329,10 +338,14 @@ void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context
 }
 
 void ParticleHandler::handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y) {
-	if (((float)rand() / RAND_MAX) < 0.03f) {
+	if (((float)rand() / RAND_MAX) < context->getDecayProb()) {
 		particle->alpha = particle->alpha - context->getDecayRate();
-		if (particle->alpha <= 0) {
-			gameTiles->setTile(x, y, 0, 0, createEmptyParticle());
+		if (particle->alpha <= 0) 
+			if (particle->type == FIRE && ((float)rand() / RAND_MAX) < 0.5f) {
+				gameTiles->setTile(x, y, 0, 0, createSmokeParticle());
+			}
+			else {
+				gameTiles->setTile(x, y, 0, 0, createEmptyParticle());
+			}
 		}
 	}
-}

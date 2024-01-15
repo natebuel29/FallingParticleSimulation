@@ -58,7 +58,7 @@ void Simulation::simulate() {
 			ImGui::Checkbox("SIM RUNNING", &simRunning);
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
-			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID" };
+			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID", "FIRE"};
 			static int item_current = 2;
 			ImGui::Combo("PARTICLES", &item_current, items, IM_ARRAYSIZE(items));
 			if (item_current != last_item) {

@@ -25,6 +25,7 @@ private:
 	ParticleContext wood;
 	ParticleContext smoke;
 	ParticleContext acid;
+	ParticleContext fire;
 	
 	ParticleContextManager();
 };
