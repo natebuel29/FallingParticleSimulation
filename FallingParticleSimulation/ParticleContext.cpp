@@ -33,6 +33,14 @@ float ParticleContext::getDecayRate() {
 	return decayRate;
 }
 
+float ParticleContext::getBurnProb() {
+	return burnProb;
+}
+
+bool ParticleContext::isParticleFlammable() {
+	return isFlammable;
+}
+
 bool ParticleContext::shouldParticleDecay() {
 	return shouldDecay;
 }

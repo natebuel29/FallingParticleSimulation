@@ -255,6 +255,42 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context, int x, int y){
 	Particle* current = gameTiles->getTileAddress(x, y, 0, 0);
 
+	Particle below = gameTiles->getTile(x, y, 0, 1);
+	Particle up = gameTiles->getTile(x, y, 0, -1);
+	Particle right = gameTiles->getTile(x, y, 1, 0);
+	Particle left = gameTiles->getTile(x, y, -1, 0);
+
+
+	ParticleContext* belowContext = contextManager->getParticleContext(below.type);
+	ParticleContext* upContext = contextManager->getParticleContext(up.type);
+	ParticleContext* leftContext = contextManager->getParticleContext(left.type);
+	ParticleContext* rightContext = contextManager->getParticleContext(right.type);
+
+	float prob = ((float)rand() / RAND_MAX);
+
+	if ((upContext != nullptr && upContext->getPhysics() == pLIQUID) || (leftContext != nullptr && leftContext->getPhysics() == pLIQUID) || (rightContext != nullptr && rightContext->getPhysics() == pLIQUID)) {
+		gameTiles->setTile(x, y, 0, 0, createEmptyParticle());
+		return;
+	}
+
+	if (belowContext != nullptr && belowContext->isParticleFlammable() && prob < belowContext->getBurnProb()) {
+		gameTiles->setTile(x, y, 0, 1, createFireParticle());
+	}
+	
+	else if (rightContext != nullptr && rightContext->isParticleFlammable() && prob < rightContext->getBurnProb()) {
+		gameTiles->setTile(x, y, 1, 0, createFireParticle());
+	}
+	
+	else if (leftContext != nullptr && leftContext->isParticleFlammable() && prob < leftContext->getBurnProb()) {
+		gameTiles->setTile(x, y, -1, 0, createFireParticle());
+	}
+
+	else if (upContext != nullptr && upContext->isParticleFlammable() && prob < upContext->getBurnProb()) {
+		gameTiles->setTile(x, y, 0, -1, createFireParticle());
+	}
+
+
+
 	handleDecay(gameTiles, current, context, x, y);
 }
 
