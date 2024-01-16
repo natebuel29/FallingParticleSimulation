@@ -289,8 +289,6 @@ void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context,
 		gameTiles->setTile(x, y, 0, -1, createFireParticle());
 	}
 
-
-
 	handleDecay(gameTiles, current, context, x, y);
 }
 
