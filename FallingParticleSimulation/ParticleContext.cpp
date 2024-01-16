@@ -25,8 +25,20 @@ Vec2 ParticleContext::getDVelocity() {
 	return dVelocity;
 }
 
+float ParticleContext::getDecayProb() {
+	return decayProb;
+}
+
 float ParticleContext::getDecayRate() {
 	return decayRate;
+}
+
+float ParticleContext::getBurnProb() {
+	return burnProb;
+}
+
+bool ParticleContext::isParticleFlammable() {
+	return isFlammable;
 }
 
 bool ParticleContext::shouldParticleDecay() {

@@ -16,6 +16,7 @@ class ParticleHandler
 		void handleAcid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleSolid(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleSmoke(GameTiles* gameTiles, ParticleContext* context, int x, int y);
+		void handleFire(GameTiles* gameTiles, ParticleContext* context, int x, int y);
 		void handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
 		void updateColor(Particle* particle);
 		void handleAcidDissolve(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y);
