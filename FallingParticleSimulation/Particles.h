@@ -12,6 +12,7 @@ enum ParticleType : uint8_t {
 	WOOD,
 	ACID,
 	FIRE,
+	ICE,
 };
 
 struct Particle {
@@ -32,7 +33,7 @@ Particle createWoodParticle();
 Particle createSmokeParticle();
 Particle createAcidParticle();
 Particle createFireParticle();
-
+Particle createIceParticle();
 
 //Not a big fan of this but something needs to be returned when we out of bounds
 Particle createOutOfBoundsParticle();

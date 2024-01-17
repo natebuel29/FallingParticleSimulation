@@ -32,6 +32,9 @@ ParticleContext* ParticleContextManager::getParticleContext(ParticleType particl
 		case ParticleType::ACID:
 			particleContext = &acid;
 			break;
+		case ParticleType::ICE:
+			particleContext = &ice;
+			break;
 	}
 	if (particleContext == nullptr) {
 	//	Logger::getInstance()->error("AHHH NO PARTICLE CONTEXT SOMETHINGS GONE HORRIBLY WRONG");
@@ -57,4 +60,7 @@ ParticleContextManager::ParticleContextManager() {
 
 	std::array<RGB, 5> fireColors = { RGB{ 255,0,0}, RGB{255,90,0}, RGB{255,154,0}, RGB{225,106,0}, RGB{255,232,8} };
 	fire = ParticleContext(PhysicsType::pSOLID, fireColors, true, { 0.0f, 0.0f }, { 0.0f, 0.0f }, true, 15, 0.30f, false, false, 0);
+
+	std::array<RGB, 5> iceColors = { RGB{ 185,232,234}, RGB{239,250,255}, RGB{225,245,246}, RGB{210,234,249}, RGB{190,232,253} };
+	ice = ParticleContext(PhysicsType::pSOLID, iceColors, false, { 0.0f, 0.0f }, { 0.0f, 0.0f }, true, 15, 0.005f, false, false, 0);
 }
