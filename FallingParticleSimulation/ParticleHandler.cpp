@@ -317,13 +317,27 @@ void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context,
 
 void ParticleHandler::handleIce(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
 	Particle* current = gameTiles->getTileAddress(x, y, 0, 0);
-	if (current->alpha <= 155) {
-		current->alpha = 0;
+
+	Particle below = gameTiles->getTile(x, y, 0, 1);
+	Particle up = gameTiles->getTile(x, y, 0, -1);
+	Particle right = gameTiles->getTile(x, y, 1, 0);
+	Particle left = gameTiles->getTile(x, y, -1, 0);
+
+	float prob = ((float)rand() / RAND_MAX);
+
+
+	if (up.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 0, -1, createIceParticle());
 	}
-
-
-	handleDecay(gameTiles, current, context, x, y);
-	
+	else if (below.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 0, 1, createIceParticle());
+	}
+	else if (left.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, -1, 0, createIceParticle());
+	}
+	else if (right.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 1, 0, createIceParticle());
+	}	
 }
 
 
