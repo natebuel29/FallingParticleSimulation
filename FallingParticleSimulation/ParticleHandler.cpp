@@ -26,6 +26,9 @@ void ParticleHandler::handleParticle(GameTiles* gameTiles, int x, int y, int fps
 	case FIRE:
 		handleFire(gameTiles, context, x, y);
 		break;
+	case ICE:
+		handleIce(gameTiles, context, x, y);
+		break;
 	case SMOKE:
 		if (((float)rand() / RAND_MAX) < 0.25f) {
 			handleSmoke(gameTiles, context, x, y);
@@ -210,28 +213,28 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 	Particle right = gameTiles->getTile(x, y, 1, 0);
 	Particle left = gameTiles->getTile(x, y, -1, 0);
 
-	if (up.type == EMPTY) {
+	if (up.type == EMPTY || up.type == FIRE) {
 		accelerateY(gameTiles, context, x, y, -1);
 	}
-	else if (upLeft.type == EMPTY) {
+	else if (upLeft.type == EMPTY || upLeft.type == FIRE) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
 		current.processed = true;
 		upLeft.processed = true;
 		gameTiles->setTile(x, y, -1, -1, current);
 		gameTiles->setTile(x, y, 0, 0, upLeft);
 	}
-	else if (upRight.type == EMPTY) {
+	else if (upRight.type == EMPTY || upRight.type == FIRE) {
 		Particle current = gameTiles->getTile(x, y, 0, 0);
 		current.processed = true;
 		upRight.processed = true;
 		gameTiles->setTile(x, y, 1, -1, current);
 		gameTiles->setTile(x, y, 0, 0, upRight);
 	}
-	else if (current.vel.x > 0.0f && right.type == EMPTY) {
+	else if (current.vel.x > 0.0f && (right.type == EMPTY || right.type == FIRE)) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
 
-	else if (current.vel.x < 0.0f && left.type == EMPTY) {
+	else if (current.vel.x < 0.0f && (left.type == EMPTY  || left.type == FIRE)) {
 		accelerateX(gameTiles, context, x, y, -1);
 	}
 	else if (left.type == EMPTY && right.type == EMPTY) {
@@ -243,11 +246,11 @@ void ParticleHandler::handleSmoke(GameTiles* gameTiles, ParticleContext* context
 			accelerateX(gameTiles, context, x, y, -1);
 		}
 	}
-	else if (left.type == EMPTY) {
+	else if (left.type == EMPTY || left.type == FIRE) {
 		accelerateX(gameTiles, context, x, y, -1);
 
 	}
-	else if (right.type == EMPTY) {
+	else if (right.type == EMPTY || right.type == FIRE) {
 		accelerateX(gameTiles, context, x, y, 1);
 	}
 }
@@ -268,9 +271,16 @@ void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context,
 
 	float prob = ((float)rand() / RAND_MAX);
 
-	if ((upContext != nullptr && upContext->getPhysics() == pLIQUID) || (leftContext != nullptr && leftContext->getPhysics() == pLIQUID) || (rightContext != nullptr && rightContext->getPhysics() == pLIQUID)) {
+	if ((upContext != nullptr && upContext->getPhysics() == pLIQUID) || (leftContext != nullptr && leftContext->getPhysics() == pLIQUID) || (rightContext != nullptr && rightContext->getPhysics() == pLIQUID) || (belowContext != nullptr && belowContext->getPhysics() == pLIQUID)) {
 		gameTiles->setTile(x, y, 0, 0, createEmptyParticle());
 		return;
+	}
+
+	if (upContext != nullptr && upContext->getPhysics() == pLIQUID) {
+		Particle target = gameTiles->getTile(x, y, 0, -1);
+		gameTiles->setTile(x, y, 0, -1, createEmptyParticle());
+		gameTiles->setTile(x, y, 0, 0, target);
+
 	}
 
 	if (belowContext != nullptr && belowContext->isParticleFlammable() && prob < belowContext->getBurnProb()) {
@@ -289,7 +299,45 @@ void ParticleHandler::handleFire(GameTiles* gameTiles, ParticleContext* context,
 		gameTiles->setTile(x, y, 0, -1, createFireParticle());
 	}
 
+	if (below.type == ICE) {
+		gameTiles->setTile(x, y, 0, 1, createWaterParticle());
+	}
+	else if (up.type == ICE) {
+		gameTiles->setTile(x, y, 0, -1, createWaterParticle());
+	}
+	else if (right.type == ICE) {
+		gameTiles->setTile(x, y, 1, 0, createWaterParticle());
+	}
+	else if (left.type == ICE) {
+		gameTiles->setTile(x, y, -1, 0, createWaterParticle());
+	}
+
 	handleDecay(gameTiles, current, context, x, y);
+}
+
+void ParticleHandler::handleIce(GameTiles* gameTiles, ParticleContext* context, int x, int y) {
+	Particle* current = gameTiles->getTileAddress(x, y, 0, 0);
+
+	Particle below = gameTiles->getTile(x, y, 0, 1);
+	Particle up = gameTiles->getTile(x, y, 0, -1);
+	Particle right = gameTiles->getTile(x, y, 1, 0);
+	Particle left = gameTiles->getTile(x, y, -1, 0);
+
+	float prob = ((float)rand() / RAND_MAX);
+
+
+	if (up.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 0, -1, createIceParticle());
+	}
+	else if (below.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 0, 1, createIceParticle());
+	}
+	else if (left.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, -1, 0, createIceParticle());
+	}
+	else if (right.type == WATER && prob < 0.04f) {
+		gameTiles->setTile(x, y, 1, 0, createIceParticle());
+	}	
 }
 
 
@@ -372,11 +420,16 @@ void ParticleHandler::accelerateY(GameTiles* gameTiles, ParticleContext* context
 }
 
 void ParticleHandler::handleDecay(GameTiles* gameTiles, Particle* particle, ParticleContext* context, int x, int y) {
-	if (((float)rand() / RAND_MAX) < context->getDecayProb()) {
-		particle->alpha = particle->alpha - context->getDecayRate();
+	if (((float)rand() / RAND_MAX) < context->getDecayProb() || particle->alpha <= 0) {
+		if (particle->alpha > 0) {
+			particle->alpha = particle->alpha - context->getDecayRate();
+		}
 		if (particle->alpha <= 0) 
 			if (particle->type == FIRE && ((float)rand() / RAND_MAX) < 0.5f) {
 				gameTiles->setTile(x, y, 0, 0, createSmokeParticle());
+			}
+			else if (particle->type == ICE) {
+				gameTiles->setTile(x, y, 0, 0, createWaterParticle());
 			}
 			else {
 				gameTiles->setTile(x, y, 0, 0, createEmptyParticle());

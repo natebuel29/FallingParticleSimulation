@@ -66,6 +66,15 @@ Particle createFireParticle() {
 	return fire;
 }
 
+Particle createIceParticle(){
+	Particle ice = Particle();
+	ice.type = ParticleType::ICE;
+	ice.colorIndex = Math::getRandomInt(0, PARTICLE_COLOR_COUNT - 1);
+	ice.processed = false;
+	ice.alpha = 255;
+	return ice;
+}
+
 Particle createOutOfBoundsParticle() {
 	Particle oob = Particle();
 	oob.type = ParticleType::OUTOFBOUNDS;
@@ -91,6 +100,9 @@ void updateCurrentParticle(ParticleCreationFunction& func, ParticleType particle
 			break;
 		case FIRE:
 			func = createFireParticle;
+			break;
+		case ICE:
+			func = createIceParticle;
 			break;
 		case EMPTY:
 			func = createEmptyParticle;

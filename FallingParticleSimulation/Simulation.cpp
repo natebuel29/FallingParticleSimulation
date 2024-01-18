@@ -58,11 +58,11 @@ void Simulation::simulate() {
 			ImGui::Checkbox("SIM RUNNING", &simRunning);
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
-			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID", "FIRE"};
+			const char* items[] = {"EMPTY", "OUTOFBOUNDS", "SAND", "WATER","SMOKE", "WOOD",  "ACID", "FIRE", "ICE"};
 			static int item_current = 2;
 			ImGui::Combo("PARTICLES", &item_current, items, IM_ARRAYSIZE(items));
 			if (item_current != last_item) {
-				updateCurrentParticle(createParticle,static_cast<ParticleType>(item_current));
+				updateCurrentParticle(createParticle, static_cast<ParticleType>(item_current));
 				last_item = item_current;
 			}
 			static ImGuiSliderFlags flags = ImGuiSliderFlags_None;
@@ -123,7 +123,7 @@ void Simulation::render() {
 
 void Simulation::step() {
 	bool isEvenFrame = fpsCount % 2 == 0;
-	for (int j = 0; j < gameTiles.getColumnCount(); j++) {
+	for (int j = isEvenFrame ? 0 : gameTiles.getColumnCount() - 1; isEvenFrame ? j < gameTiles.getColumnCount() : j >= 0;  isEvenFrame ? j++ : j--) {
 		for (int i =  isEvenFrame ? 0 : gameTiles.getRowCount()-1; isEvenFrame ? i < gameTiles.getRowCount() : i >= 0; isEvenFrame? i++ : i--) {
 			Particle* particle = gameTiles.getTileAddress(i, j, 0, 0);
 			if (particle->type != EMPTY && particle->processed == false) {
@@ -209,7 +209,11 @@ void Simulation::fillCircle(int centerX, int centerY, int radius) {
 			int minus_y = centerY - radius * (sin(radians));
 
 			for (int j = minus_y; j < y; j++) {
-				gameTiles.setTile(Math::roundToNearestMultiple(x, tileSize) / tileSize, Math::roundToNearestMultiple(j, tileSize) / tileSize, 0, 0, createParticle());
+				int roundX = Math::roundToNearestMultiple(x, tileSize) / tileSize;
+				int roundY = Math::roundToNearestMultiple(j, tileSize) / tileSize;
+				if (gameTiles.getTileAddress(roundX, roundY, 0, 0)->type == EMPTY) {
+					gameTiles.setTile(roundX,roundY, 0, 0, createParticle());
+				}			
 			}
 		}
 	}
